@@ -1,0 +1,264 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.section	.text.Set_upPWM,"ax",@progbits
+  11               	.global	Set_upPWM
+  13               	Set_upPWM:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16               	/* stack size = 0 */
+  17               	.L__stack_usage = 0
+  18 0000 83E4      		ldi r24,lo8(67)
+  19 0002 8093 8000 		sts 128,r24
+  20 0006 82E1      		ldi r24,lo8(18)
+  21 0008 8093 8100 		sts 129,r24
+  22 000c 82E0      		ldi r24,lo8(2)
+  23 000e 8093 6F00 		sts 111,r24
+  24 0012 8FEF      		ldi r24,lo8(-1)
+  25 0014 84B9      		out 36-32,r24
+  26               	/* epilogue start */
+  27 0016 0895      		ret
+  29               		.section	.text.Set_frequency,"ax",@progbits
+  30               	.global	Set_frequency
+  32               	Set_frequency:
+  33               	/* prologue: function */
+  34               	/* frame size = 0 */
+  35               	/* stack size = 0 */
+  36               	.L__stack_usage = 0
+  37 0000 9093 8900 		sts 136+1,r25
+  38 0004 8093 8800 		sts 136,r24
+  39               	/* epilogue start */
+  40 0008 0895      		ret
+  42               		.section	.text.__vector_17,"ax",@progbits
+  43               	.global	__vector_17
+  45               	__vector_17:
+  46 0000 1F92      		push r1
+  47 0002 0F92      		push r0
+  48 0004 0FB6      		in r0,__SREG__
+  49 0006 0F92      		push r0
+  50 0008 1124      		clr __zero_reg__
+  51 000a 8F93      		push r24
+  52               	/* prologue: Signal */
+  53               	/* frame size = 0 */
+  54               	/* stack size = 4 */
+  55               	.L__stack_usage = 4
+  56 000c 1092 8500 		sts 132+1,__zero_reg__
+  57 0010 1092 8400 		sts 132,__zero_reg__
+  58 0014 88B1      		in r24,40-32
+  59 0016 8095      		com r24
+  60 0018 88B9      		out 40-32,r24
+  61               	/* epilogue start */
+  62 001a 8F91      		pop r24
+  63 001c 0F90      		pop r0
+  64 001e 0FBE      		out __SREG__,r0
+  65 0020 0F90      		pop r0
+  66 0022 1F90      		pop r1
+  67 0024 1895      		reti
+  69               		.section	.text.__vector_default,"ax",@progbits
+  70               	.global	__vector_default
+  72               	__vector_default:
+  73 0000 1F92      		push r1
+  74 0002 0F92      		push r0
+  75 0004 0FB6      		in r0,__SREG__
+  76 0006 0F92      		push r0
+  77 0008 1124      		clr __zero_reg__
+  78               	/* prologue: Signal */
+  79               	/* frame size = 0 */
+  80               	/* stack size = 3 */
+  81               	.L__stack_usage = 3
+  82 000a 8AEA      		ldi r24,lo8(-86)
+  83 000c 88B9      		out 40-32,r24
+  84               	.L5:
+  85 000e 88B1      		in r24,40-32
+  86 0010 8095      		com r24
+  87 0012 88B9      		out 40-32,r24
+  88 0014 8FE4      		 ldi r24,lo8(-15537)
+  89 0016 93EC      	    ldi r25,hi8(-15537)
+  90 0018 0197      	    1:sbiw r24,1
+  91 001a 01F4      	    brne 1b
+  92 001c 00C0      		rjmp .
+  93 001e 0000      		nop
+  94 0020 00C0      		rjmp .L5
+  96               		.section	.text.startup.main,"ax",@progbits
+  97               	.global	main
+  99               	main:
+ 100               	/* prologue: function */
+ 101               	/* frame size = 0 */
+ 102               	/* stack size = 0 */
+ 103               	.L__stack_usage = 0
+ 104 0000 8FEF      		ldi r24,lo8(-1)
+ 105 0002 87B9      		out 39-32,r24
+ 106 0004 88B9      		out 40-32,r24
+ 107 0006 0E94 0000 		call Set_upPWM
+ 108 000a 1092 8500 		sts 132+1,__zero_reg__
+ 109 000e 1092 8400 		sts 132,__zero_reg__
+ 110               	/* #APP */
+ 111               	 ;  67 "main.c" 1
+ 112 0012 7894      		sei
+ 113               	 ;  0 "" 2
+ 114               	/* #NOAPP */
+ 115 0014 88E5      		ldi r24,lo8(600)
+ 116 0016 92E0      		ldi r25,hi8(600)
+ 117 0018 9093 8900 		sts 136+1,r25
+ 118 001c 8093 8800 		sts 136,r24
+ 119 0020 26E2      		ldi r18,lo8(550)
+ 120 0022 A22E      		mov r10,r18
+ 121 0024 22E0      		ldi r18,hi8(550)
+ 122 0026 B22E      		mov r11,r18
+ 123 0028 24EF      		ldi r18,lo8(500)
+ 124 002a 31E0      		ldi r19,hi8(500)
+ 125 002c 42EC      		ldi r20,lo8(450)
+ 126 002e 51E0      		ldi r21,hi8(450)
+ 127 0030 60E9      		ldi r22,lo8(400)
+ 128 0032 71E0      		ldi r23,hi8(400)
+ 129 0034 EEE5      		ldi r30,lo8(350)
+ 130 0036 F1E0      		ldi r31,hi8(350)
+ 131 0038 ACE2      		ldi r26,lo8(300)
+ 132 003a 8A2E      		mov r8,r26
+ 133 003c A1E0      		ldi r26,hi8(300)
+ 134 003e 9A2E      		mov r9,r26
+ 135 0040 CAEF      		ldi r28,lo8(250)
+ 136 0042 D0E0      		ldi r29,hi8(250)
+ 137 0044 08EC      		ldi r16,lo8(200)
+ 138 0046 10E0      		ldi r17,hi8(200)
+ 139 0048 B6E9      		ldi r27,lo8(150)
+ 140 004a EB2E      		mov r14,r27
+ 141 004c F12C      		mov r15,__zero_reg__
+ 142 004e A4E6      		ldi r26,lo8(100)
+ 143 0050 CA2E      		mov r12,r26
+ 144 0052 D12C      		mov r13,__zero_reg__
+ 145               	.L7:
+ 146 0054 8FE9      		 ldi r24,lo8(99999)
+ 147 0056 96E8      	    ldi r25,hi8(99999)
+ 148 0058 A1E0      	    ldi r26,hlo8(99999)
+ 149 005a 8150      	    1:subi r24,1
+ 150 005c 9040      	    sbci r25,0
+ 151 005e A040      	    sbci r26,0
+ 152 0060 01F4      	    brne 1b
+ 153 0062 00C0      		rjmp .
+ 154 0064 0000      		nop
+ 155 0066 B092 8900 		sts 136+1,r11
+ 156 006a A092 8800 		sts 136,r10
+ 157 006e 8FE9      		 ldi r24,lo8(99999)
+ 158 0070 96E8      	    ldi r25,hi8(99999)
+ 159 0072 A1E0      	    ldi r26,hlo8(99999)
+ 160 0074 8150      	    1:subi r24,1
+ 161 0076 9040      	    sbci r25,0
+ 162 0078 A040      	    sbci r26,0
+ 163 007a 01F4      	    brne 1b
+ 164 007c 00C0      		rjmp .
+ 165 007e 0000      		nop
+ 166 0080 3093 8900 		sts 136+1,r19
+ 167 0084 2093 8800 		sts 136,r18
+ 168 0088 8FE9      		 ldi r24,lo8(99999)
+ 169 008a 96E8      	    ldi r25,hi8(99999)
+ 170 008c A1E0      	    ldi r26,hlo8(99999)
+ 171 008e 8150      	    1:subi r24,1
+ 172 0090 9040      	    sbci r25,0
+ 173 0092 A040      	    sbci r26,0
+ 174 0094 01F4      	    brne 1b
+ 175 0096 00C0      		rjmp .
+ 176 0098 0000      		nop
+ 177 009a 5093 8900 		sts 136+1,r21
+ 178 009e 4093 8800 		sts 136,r20
+ 179 00a2 8FE9      		 ldi r24,lo8(99999)
+ 180 00a4 96E8      	    ldi r25,hi8(99999)
+ 181 00a6 A1E0      	    ldi r26,hlo8(99999)
+ 182 00a8 8150      	    1:subi r24,1
+ 183 00aa 9040      	    sbci r25,0
+ 184 00ac A040      	    sbci r26,0
+ 185 00ae 01F4      	    brne 1b
+ 186 00b0 00C0      		rjmp .
+ 187 00b2 0000      		nop
+ 188 00b4 7093 8900 		sts 136+1,r23
+ 189 00b8 6093 8800 		sts 136,r22
+ 190 00bc 8FE9      		 ldi r24,lo8(99999)
+ 191 00be 96E8      	    ldi r25,hi8(99999)
+ 192 00c0 A1E0      	    ldi r26,hlo8(99999)
+ 193 00c2 8150      	    1:subi r24,1
+ 194 00c4 9040      	    sbci r25,0
+ 195 00c6 A040      	    sbci r26,0
+ 196 00c8 01F4      	    brne 1b
+ 197 00ca 00C0      		rjmp .
+ 198 00cc 0000      		nop
+ 199 00ce F093 8900 		sts 136+1,r31
+ 200 00d2 E093 8800 		sts 136,r30
+ 201 00d6 8FE9      		 ldi r24,lo8(99999)
+ 202 00d8 96E8      	    ldi r25,hi8(99999)
+ 203 00da A1E0      	    ldi r26,hlo8(99999)
+ 204 00dc 8150      	    1:subi r24,1
+ 205 00de 9040      	    sbci r25,0
+ 206 00e0 A040      	    sbci r26,0
+ 207 00e2 01F4      	    brne 1b
+ 208 00e4 00C0      		rjmp .
+ 209 00e6 0000      		nop
+ 210 00e8 9092 8900 		sts 136+1,r9
+ 211 00ec 8092 8800 		sts 136,r8
+ 212 00f0 8FE9      		 ldi r24,lo8(99999)
+ 213 00f2 96E8      	    ldi r25,hi8(99999)
+ 214 00f4 A1E0      	    ldi r26,hlo8(99999)
+ 215 00f6 8150      	    1:subi r24,1
+ 216 00f8 9040      	    sbci r25,0
+ 217 00fa A040      	    sbci r26,0
+ 218 00fc 01F4      	    brne 1b
+ 219 00fe 00C0      		rjmp .
+ 220 0100 0000      		nop
+ 221 0102 D093 8900 		sts 136+1,r29
+ 222 0106 C093 8800 		sts 136,r28
+ 223 010a 8FE9      		 ldi r24,lo8(99999)
+ 224 010c 96E8      	    ldi r25,hi8(99999)
+ 225 010e A1E0      	    ldi r26,hlo8(99999)
+ 226 0110 8150      	    1:subi r24,1
+ 227 0112 9040      	    sbci r25,0
+ 228 0114 A040      	    sbci r26,0
+ 229 0116 01F4      	    brne 1b
+ 230 0118 00C0      		rjmp .
+ 231 011a 0000      		nop
+ 232 011c 1093 8900 		sts 136+1,r17
+ 233 0120 0093 8800 		sts 136,r16
+ 234 0124 8FE9      		 ldi r24,lo8(99999)
+ 235 0126 96E8      	    ldi r25,hi8(99999)
+ 236 0128 A1E0      	    ldi r26,hlo8(99999)
+ 237 012a 8150      	    1:subi r24,1
+ 238 012c 9040      	    sbci r25,0
+ 239 012e A040      	    sbci r26,0
+ 240 0130 01F4      	    brne 1b
+ 241 0132 00C0      		rjmp .
+ 242 0134 0000      		nop
+ 243 0136 F092 8900 		sts 136+1,r15
+ 244 013a E092 8800 		sts 136,r14
+ 245 013e 8FE9      		 ldi r24,lo8(99999)
+ 246 0140 96E8      	    ldi r25,hi8(99999)
+ 247 0142 A1E0      	    ldi r26,hlo8(99999)
+ 248 0144 8150      	    1:subi r24,1
+ 249 0146 9040      	    sbci r25,0
+ 250 0148 A040      	    sbci r26,0
+ 251 014a 01F4      	    brne 1b
+ 252 014c 00C0      		rjmp .
+ 253 014e 0000      		nop
+ 254 0150 D092 8900 		sts 136+1,r13
+ 255 0154 C092 8800 		sts 136,r12
+ 256 0158 00C0      		rjmp .L7
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:2      *ABS*:0000003f __SREG__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:3      *ABS*:0000003e __SP_H__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:4      *ABS*:0000003d __SP_L__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:5      *ABS*:00000034 __CCP__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:13     .text.Set_upPWM:00000000 Set_upPWM
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:32     .text.Set_frequency:00000000 Set_frequency
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:45     .text.__vector_17:00000000 __vector_17
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:72     .text.__vector_default:00000000 __vector_default
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccvsWTHJ.s:99     .text.startup.main:00000000 main
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
