@@ -1,0 +1,55 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.section	.text.ddr_setup,"ax",@progbits
+   9               	.global	ddr_setup
+  11               	ddr_setup:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14               	/* stack size = 0 */
+  15               	.L__stack_usage = 0
+  16 0000 11B8      		out 0x1,__zero_reg__
+  17 0002 80EC      		ldi r24,lo8(-64)
+  18 0004 84B9      		out 0x4,r24
+  19 0006 8FEF      		ldi r24,lo8(-1)
+  20 0008 87B9      		out 0x7,r24
+  21 000a 88E0      		ldi r24,lo8(8)
+  22 000c 8AB9      		out 0xa,r24
+  23 000e 87E0      		ldi r24,lo8(7)
+  24 0010 8DB9      		out 0xd,r24
+  25 0012 10BA      		out 0x10,__zero_reg__
+  26 0014 0895      		ret
+  28               		.section	.text.startup.main,"ax",@progbits
+  29               	.global	main
+  31               	main:
+  32               	/* prologue: function */
+  33               	/* frame size = 0 */
+  34               	/* stack size = 0 */
+  35               	.L__stack_usage = 0
+  36 0000 0E94 0000 		call ddr_setup
+  37 0004 60E8      		ldi r22,lo8(-128)
+  38 0006 75E2      		ldi r23,lo8(37)
+  39 0008 80E0      		ldi r24,0
+  40 000a 90E0      		ldi r25,0
+  41 000c 0E94 0000 		call usart_setup
+  42 0010 80E0      		ldi r24,0
+  43 0012 90E0      		ldi r25,0
+  44 0014 0895      		ret
+  46               		.ident	"GCC: (GNU) 4.7.2"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccGXo7lN.s:2      *ABS*:0000003e __SP_H__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccGXo7lN.s:3      *ABS*:0000003d __SP_L__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccGXo7lN.s:4      *ABS*:0000003f __SREG__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccGXo7lN.s:5      *ABS*:0000003b __RAMPZ__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccGXo7lN.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccGXo7lN.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccGXo7lN.s:11     .text.ddr_setup:00000000 ddr_setup
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccGXo7lN.s:31     .text.startup.main:00000000 main
+
+UNDEFINED SYMBOLS
+usart_setup
