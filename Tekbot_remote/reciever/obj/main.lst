@@ -1,0 +1,157 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.section	.text.ddr_setup,"ax",@progbits
+   8               	.global	ddr_setup
+  10               	ddr_setup:
+  11               	/* prologue: function */
+  12               	/* frame size = 0 */
+  13               	/* stack size = 0 */
+  14               	.L__stack_usage = 0
+  15 0000 11B8      		out 0x1,__zero_reg__
+  16 0002 80EC      		ldi r24,lo8(-64)
+  17 0004 84B9      		out 0x4,r24
+  18 0006 8FEF      		ldi r24,lo8(-1)
+  19 0008 87B9      		out 0x7,r24
+  20 000a 88E0      		ldi r24,lo8(8)
+  21 000c 8AB9      		out 0xa,r24
+  22 000e 87E0      		ldi r24,lo8(7)
+  23 0010 8DB9      		out 0xd,r24
+  24 0012 10BA      		out 0x10,__zero_reg__
+  25 0014 0895      		ret
+  27               		.section	.text.pwm_setup,"ax",@progbits
+  28               	.global	pwm_setup
+  30               	pwm_setup:
+  31               	/* prologue: function */
+  32               	/* frame size = 0 */
+  33               	/* stack size = 0 */
+  34               	.L__stack_usage = 0
+  35 0000 93E2      		ldi r25,lo8(35)
+  36 0002 94BD      		out 0x24,r25
+  37 0004 83E0      		ldi r24,lo8(3)
+  38 0006 85BD      		out 0x25,r24
+  39 0008 16BC      		out 0x26,__zero_reg__
+  40 000a 84E6      		ldi r24,lo8(100)
+  41 000c 88BD      		out 0x28,r24
+  42 000e 9093 B000 		sts 176,r25
+  43 0012 94E0      		ldi r25,lo8(4)
+  44 0014 9093 B100 		sts 177,r25
+  45 0018 1092 B200 		sts 178,__zero_reg__
+  46 001c 8093 B400 		sts 180,r24
+  47 0020 0895      		ret
+  49               		.section	.text.motor_speed,"ax",@progbits
+  50               	.global	motor_speed
+  52               	motor_speed:
+  53               	/* prologue: function */
+  54               	/* frame size = 0 */
+  55               	/* stack size = 0 */
+  56               	.L__stack_usage = 0
+  57 0000 982F      		mov r25,r24
+  58 0002 907C      		andi r25,lo8(-64)
+  59 0004 8F70      		andi r24,lo8(15)
+  60 0006 9038      		cpi r25,lo8(-128)
+  61 0008 01F0      		breq .L4
+  62 000a 9034      		cpi r25,lo8(64)
+  63 000c 01F4      		brne .L9
+  64 000e 00C0      		rjmp .L10
+  65               	.L4:
+  66 0010 8111      		cpse r24,__zero_reg__
+  67 0012 00C0      		rjmp .L7
+  68 0014 589A      		sbi 0xb,0
+  69               	.L7:
+  70 0016 5898      		cbi 0xb,0
+  71 0018 00C0      		rjmp .L11
+  72               	.L10:
+  73 001a 8111      		cpse r24,__zero_reg__
+  74 001c 00C0      		rjmp .L8
+  75 001e 599A      		sbi 0xb,1
+  76               	.L8:
+  77 0020 599A      		sbi 0xb,1
+  78               	.L11:
+  79 0022 81E0      		ldi r24,lo8(1)
+  80 0024 0895      		ret
+  81               	.L9:
+  82 0026 80E0      		ldi r24,0
+  83 0028 0895      		ret
+  85               		.section	.text.__vector_25,"ax",@progbits
+  86               	.global	__vector_25
+  88               	__vector_25:
+  89 0000 1F92      		push r1
+  90 0002 0F92      		push r0
+  91 0004 0FB6      		in r0,__SREG__
+  92 0006 0F92      		push r0
+  93 0008 1124      		clr __zero_reg__
+  94 000a 8F93      		push r24
+  95 000c 9F93      		push r25
+  96               	/* prologue: Signal */
+  97               	/* frame size = 0 */
+  98               	/* stack size = 5 */
+  99               	.L__stack_usage = 5
+ 100 000e 8091 CE00 		lds r24,206
+ 101 0012 982F      		mov r25,r24
+ 102 0014 9068      		ori r25,lo8(-128)
+ 103 0016 9038      		cpi r25,lo8(-128)
+ 104 0018 01F4      		brne .L13
+ 105 001a 8093 0000 		sts motor1_state,r24
+ 106 001e 00C0      		rjmp .L12
+ 107               	.L13:
+ 108 0020 982F      		mov r25,r24
+ 109 0022 9064      		ori r25,lo8(64)
+ 110 0024 9034      		cpi r25,lo8(64)
+ 111 0026 01F4      		brne .L12
+ 112 0028 8093 0000 		sts motor2_state,r24
+ 113               	.L12:
+ 114               	/* epilogue start */
+ 115 002c 9F91      		pop r25
+ 116 002e 8F91      		pop r24
+ 117 0030 0F90      		pop r0
+ 118 0032 0FBE      		out __SREG__,r0
+ 119 0034 0F90      		pop r0
+ 120 0036 1F90      		pop r1
+ 121 0038 1895      		reti
+ 123               		.section	.text.startup.main,"ax",@progbits
+ 124               	.global	main
+ 126               	main:
+ 127               	/* prologue: function */
+ 128               	/* frame size = 0 */
+ 129               	/* stack size = 0 */
+ 130               	.L__stack_usage = 0
+ 131 0000 0E94 0000 		call ddr_setup
+ 132 0004 60E8      		ldi r22,lo8(-128)
+ 133 0006 75E2      		ldi r23,lo8(37)
+ 134 0008 80E0      		ldi r24,0
+ 135 000a 90E0      		ldi r25,0
+ 136 000c 0E94 0000 		call usart_setup
+ 137 0010 80E0      		ldi r24,0
+ 138 0012 90E0      		ldi r25,0
+ 139 0014 0895      		ret
+ 141               	.global	motor2_state
+ 142               		.section .bss
+ 145               	motor2_state:
+ 146 0000 00        		.zero	1
+ 147               	.global	motor1_state
+ 150               	motor1_state:
+ 151 0001 00        		.zero	1
+ 152               		.ident	"GCC: (GNU) 4.7.2"
+ 153               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:2      *ABS*:0000003e __SP_H__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:3      *ABS*:0000003d __SP_L__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:4      *ABS*:0000003f __SREG__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:5      *ABS*:00000000 __tmp_reg__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:6      *ABS*:00000001 __zero_reg__
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:10     .text.ddr_setup:00000000 ddr_setup
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:30     .text.pwm_setup:00000000 pwm_setup
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:52     .text.motor_speed:00000000 motor_speed
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:88     .text.__vector_25:00000000 __vector_25
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:150    .bss:00000001 motor1_state
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:145    .bss:00000000 motor2_state
+/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccNlgP3i.s:126    .text.startup.main:00000000 main
+
+UNDEFINED SYMBOLS
+usart_setup
+__do_clear_bss

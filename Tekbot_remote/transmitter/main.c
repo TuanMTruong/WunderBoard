@@ -50,9 +50,15 @@
 #define FORWARD		0x20
 #define BACKWARD	0x10
 
-uint8_t send_buffer[4];
-uint8_t motro1_speed = 0;
-uint8_t motor2_speed = 0;
+
+// byte format [M1|M2|F|B|D0|D1|D2|D3]
+// M1, M2 for which motor
+// F = forward
+// B = Backward
+// D[0,4] = speed data
+uint8_t motor1_state = 0;
+uint8_t motor2_state = 0;
+
 /******************************************************************/
 // Set up all the inputs and out for the data direction 
 // 1 = output , 0 = input
@@ -82,7 +88,7 @@ uint8_t adc_read(uint8_t channel){
 	ADCSRA |= 0b01000000; 			// Start a new sample.
 	while ((ADCSRA & 0b00010000) == 0 ); 	// Wait for a Valid Sample
 	ADCSRA |= 0b00010000; 			// Tell ADC you have the sample you want.
-	
+
 	test = ADCH; 
 	ADCSRA = 0x00; 				// Disable the ADC
 
@@ -100,17 +106,48 @@ uint8_t adc_read(uint8_t channel){
 /******************************************************************/
 uint8_t calc_speed(uint8_t x_data, uint8_t y_data){
 	uint8_t max_speed = 0;
-	if (y_data > (Y_NOR+DEAD_ZONE) ){
-		max_speed = y_data - Y_NOR;
-	}
-	else if (y_data < (Y_NOR - DEAD_ZONE)){
-		max_speed = Y_NOR - y_data;
-	}
-	else {
-		max_speed = 0;
+
+	//check if tilt data is within Dead zone
+	if ( (y_data < (Y_NOR + DEAD_ZONE)) && (x_data < (X_NOR + DEAD_ZONE))){
+		max_speed = 0;	//stops all motor
+		motor1_state = MOTOR1 | max_speed;	//set motor 1 stop
+		motor2_state = MOTOR2 | max_speed;	//set motor 2 stop
+		return 0;
 	}
 
-	
+	//Check if tilt is forward or backward
+	if (y_data >= (Y_NOR+DEAD_ZONE) ){
+		//set all motor to spin forward
+		max_speed = (y_data - Y_NOR) | FORWARD;
+	}
+	else {
+		//set all motor to spin backward
+		max_speed = ((Y_NOR - y_data) | BACKWARD);
+	}
+
+	//check if tilt is left or right
+	if (x_data >= (X_NOR + DEAD_ZONE)){
+		motor2_state = max_speed - (x_data - X_NOR);
+		motor1_state = max_speed;
+	}
+	else {
+		motor1_state = max_speed - (X_NOR - x_data);
+		motor2_state = max_speed;
+	}
+	return 1;
+
+}
+
+
+/******************************************************************/
+// Send motor data 
+/******************************************************************/
+uint8_t usart_sendmotor(void){
+	usart_sendbyte(motor1_state);
+	_delay_ms(1);
+	usart_sendbyte(motor2_state);
+	_delay_ms(1);
+	return(1);
 }
 /******************************************************************/
 //let the main party begin!!!!!!
@@ -118,17 +155,23 @@ uint8_t calc_speed(uint8_t x_data, uint8_t y_data){
 int main(void){
 	ddr_setup();		//set up pins
 	usart_setup(BAUD);	//set up USART with defined Baudrate
+
+	uint8_t adc_data_xaxis = 0;	//hold x tilt data
+	uint8_t adc_data_yaxis = 0;	//hold y tilt data
 	
-	uint8_t adc_data_xaxis = 0;
-	uint8_t adc_data_yaxis = 0;
+	uint8_t motor1_prev = 0;	//hold previous m1 state
+	uint8_t motor2_prev = 0;	//hold previous m2 state
 
 	while(1){
-		_delay_ms(1);
-		adc_data_xaxis = adc_read(X_AXIS);
-//		usart_sendbyte(temp);
-//		usart_sendarray("HELLO", 5);		
-		usart_sendbyte(MOTOR1 | (i));
-
+		_delay_ms(1);				//just wait
+		adc_data_xaxis = adc_read(X_AXIS);	//read x tilt
+		adc_data_yaxis = adc_read(Y_AXIS);	//read y tilt
+		calc_speed(adc_data_xaxis, adc_data_yaxis);	//calc motor
+		if ( (motor1_state != motor1_prev) || (motor2_state != motor2_prev) ){
+			usart_sendmotor();		//if new data send motor data
+		}
+		motor1_prev = motor1_state;		//save previous m1 state
+		motor2_prev = motor2_state;		//save previous m2 state
 	}
 
 }
