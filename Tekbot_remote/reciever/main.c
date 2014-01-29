@@ -6,6 +6,14 @@
 // Every time the reciever gets a usart interrupt it will check
 // which motor the data is for, the direction of said motor, and 
 // the speed. 
+//
+// update: because the wunderboard is 3.3V and the motro driver is
+// 5V, the wunderboard is having trouble using a pwm to flip the 
+// direction pin at a fast speed. This is could be solved by adding
+// a transistor that the wunderboard would control for the pwm.
+// But with limited time and resources this code has ditched the
+// pwm meathod and gone with simple forward, backward, right and 
+// left option with no speed control.
 /******************************************************************/
 // Hardware spec:
 // Buttons	A0-A3
@@ -38,11 +46,16 @@
 #define MOTOR2		0x40
 #define FORWARD		0x20
 #define BACKWARD	0x10
+#define RIGHT		0x22
+#define LEFT		0x33
+#define STOP		0x3A
 #define BAUD		9600
 
 #define MOTOR_PORT	PORTD
-#define M1_EN_PIN	0
-#define M2_EN_PIN	1
+#define M1_EN_PIN	4
+#define M2_EN_PIN	6
+#define M1_DIR_PIN	5
+#define M2_DIR_PIN	7
 #define M1_ENABLE()	MOTOR_PORT &= ~(1<<M1_EN_PIN)
 #define M1_DISABLE()	MOTOR_PORT |= (1<<M1_EN_PIN)
 #define M2_ENABLE()	MOTOR_PORT &= ~(1<<M2_EN_PIN)
@@ -64,7 +77,7 @@ uint8_t motor2_state = 0;
 /******************************************************************/
 void ddr_setup(void){
 	DDRA = 0x00;				//set all buttons and switches to input
-	DDRB = (1<<RED_EN)|(1<<GREEN_EN);	//enable the Green and Red LEDs
+	DDRB = (1<<RED_EN)|(1<<GREEN_EN)|(1<<5);	//enable the Green and Red LEDs
 	DDRC = 0xFF;				//Set LEDs rows to output
 	DDRD = (1<<USART_TX);			//USART TX % RX set
 	DDRE = 0x07;				//set LEDs column to output
@@ -79,16 +92,12 @@ void ddr_setup(void){
 /******************************************************************/
 void pwm_setup(void){
 	
-	TCCR0A = (1<<COM0B1) | (3<<WGM00);
-	TCCR0B = (0<<WGM02) | (3<<CS00);
-	TCNT0 = 0;
-	OCR0B = 100;
-	
-	TCCR2A = (1<<COM2B1) | (3<<WGM20);
-	TCCR2B = (4<<CS20);
-	TCNT2 = 0;
-	OCR2B = 100;
-
+	TCCR1A = (0<<WGM10);
+	TCCR1B = (1<<WGM12) | (4<<CS10);
+	TCNT1 = 0;
+	OCR1A = 1000;
+	OCR1B = 1000;
+	TIMSK1 = (1<<OCIE1A) | (1<<OCIE1B);
 	return;
 }
 
@@ -143,10 +152,112 @@ ISR(USART1_RX_vect){
 
 }
 
+
+/******************************************************************/
+// Interrupt for PWM timer to flip a pin
+// used OCR1A and OCR1B to create a pwm for the direction pins
+/******************************************************************/
+
+ISR(TIMER1_COMPA_vect){
+	if (OCR1A == 1000){
+		MOTOR_PORT |= (1<<M1_DIR_PIN);
+		OCR1A = 2000;
+	} else {
+		MOTOR_PORT &= ~(1<<M1_DIR_PIN);
+		OCR1A = 1000;
+	}
+}
+
+ISR(TIMER1_COMPB_vect){
+	if (OCR1B == 1000){
+		MOTOR_PORT |= (1<<M2_DIR_PIN);
+		OCR1B = 2000;
+	} else {
+		MOTOR_PORT &= ~(1<<M2_DIR_PIN);
+		OCR1B = 1000;
+	}
+}
+
+
+/******************************************************************/
+// clear all LEDs
+/******************************************************************/
+void clearArray(void){
+	PORTC = 0x00;
+	PORTB |= (1<<RED_EN)|(1<<GREEN_EN);
+	PORTB &= ~((1<<RED_EN)|(1<<GREEN_EN));
+}
+
+
+void mtr_cmd(uint8_t cmd){
+	if (cmd == STOP){
+		M1_DISABLE();
+		M2_DISABLE();
+	}
+	else if (cmd == FORWARD){
+		M1_ENABLE();
+		M2_ENABLE();
+		MOTOR_PORT &= ~((1<<M1_EN_PIN)|(1<<M2_DIR_PIN));
+	}
+	else if (cmd == BACKWARD){
+		M1_ENABLE();
+		M2_ENABLE();
+		MOTOR_PORT |= ((1<<M1_EN_PIN)|(1<<M2_DIR_PIN));
+	}
+	else if (cmd == RIGHT){
+		M1_ENABLE();
+		M2_ENABLE();
+		MOTOR_PORT |= (1<<M2_DIR_PIN);
+		MOTOR_PORT &= ~(1<<M1_DIR_PIN);
+	}
+	else if (cmd == LEFT){
+		M1_ENABLE();
+		M2_ENABLE();
+		MOTOR_PORT |= (1<<M1_DIR_PIN);
+		MOTOR_PORT &= ~(1<<M2_DIR_PIN);
+	}
+	
+
+}
 /******************************************************************/
 //let the main party begin!!!!!!
 /******************************************************************/
 int main(void){
 	ddr_setup();
 	usart_setup(BAUD);
+	//pwm_setup();
+	clearArray();
+	PORTB = (1<<RED_EN);
+	PORTC = 0xff;
+	
+	uint8_t states = FORWARD;
+	PORTD = 0xff;
+	while(1);
+	/*
+	//sei();
+	while(1){
+		switch(states){
+		//states = usart_readbyte();
+		states = FORWARD;
+			case FORWARD:
+				PORTE = 2;
+				mtr_cmd(FORWARD);
+				break;
+			case BACKWARD:
+				mtr_cmd(BACKWARD);
+				break;
+			case RIGHT:
+				mtr_cmd(RIGHT);
+				break;
+			case LEFT:
+				mtr_cmd(LEFT);
+				break;
+			default:
+				mtr_cmd(STOP);
+				break;
+
+		}
+
+	}
+	*/
 }

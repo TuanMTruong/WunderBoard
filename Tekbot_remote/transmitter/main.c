@@ -49,6 +49,9 @@
 #define MOTOR2		0x40
 #define FORWARD		0x20
 #define BACKWARD	0x10
+#define RIGHT		0x22
+#define LEFT		0x33
+#define STOP		0x3A
 
 
 // byte format [M1|M2|F|B|D0|D1|D2|D3]
@@ -58,6 +61,7 @@
 // D[0,4] = speed data
 uint8_t motor1_state = 0;
 uint8_t motor2_state = 0;
+uint8_t mtr_state = 0;
 
 /******************************************************************/
 // Set up all the inputs and out for the data direction 
@@ -138,6 +142,30 @@ uint8_t calc_speed(uint8_t x_data, uint8_t y_data){
 
 }
 
+void set_mtr_state(xdata, ydata){
+	
+	if ( (ydata < (Y_NOR + DEAD_ZONE)) && (ydata > (Y_NOR - DEAD_ZONE)) \
+			(xdata < (X_NOR + DEAD_ZONE)) && (xdata > (X_NOR - DEAD_ZONE))){
+		mtr_state = STOP;
+		return;
+	}
+	else if (ydata > (Y_NOR + DEAD_ZONE)){
+		mtr_state = FORWARD;
+	} 
+	else if (ydata < (Y_NOR - DEAD_ZONE)){
+		mtr_state = BACKWARD;
+	} 
+	else if ( xdata > (X_NOR + DEAD_ZONE)){
+		mtr_state = RIGHT;
+	}
+	else {
+		mtr_state = LEFT;
+	}
+	return;
+
+
+}
+
 
 /******************************************************************/
 // Send motor data 
@@ -149,6 +177,18 @@ uint8_t usart_sendmotor(void){
 	_delay_ms(1);
 	return(1);
 }
+
+
+
+/******************************************************************/
+// clear all LEDs
+/******************************************************************/
+void clearArray(void){
+	PORTC = 0x00;
+	PORTB |= (1<<RED_EN)|(1<<GREEN_EN);
+	PORTB &= ~((1<<RED_EN)|(1<<GREEN_EN));
+}
+
 /******************************************************************/
 //let the main party begin!!!!!!
 /******************************************************************/
@@ -161,17 +201,27 @@ int main(void){
 	
 	uint8_t motor1_prev = 0;	//hold previous m1 state
 	uint8_t motor2_prev = 0;	//hold previous m2 state
-
+	uint8_t mtr_prev = 0;
 	while(1){
 		_delay_ms(1);				//just wait
 		adc_data_xaxis = adc_read(X_AXIS);	//read x tilt
 		adc_data_yaxis = adc_read(Y_AXIS);	//read y tilt
+		
+		/*
 		calc_speed(adc_data_xaxis, adc_data_yaxis);	//calc motor
 		if ( (motor1_state != motor1_prev) || (motor2_state != motor2_prev) ){
 			usart_sendmotor();		//if new data send motor data
 		}
 		motor1_prev = motor1_state;		//save previous m1 state
 		motor2_prev = motor2_state;		//save previous m2 state
+		*/
+
+		set_mtr_state(adc_data_xaxis, adc_data_yaxis);
+		if ( mtr_state != mtr_prev){
+			usart_sendbyte(mtr_state);
+		}
+		mtr_prev = mtr_state;
+
 	}
 
 }
