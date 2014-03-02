@@ -79,8 +79,9 @@ void ddr_setup(void){
 	DDRA = 0x00;				//set all buttons and switches to input
 	DDRB = (1<<RED_EN)|(1<<GREEN_EN)|(1<<5);	//enable the Green and Red LEDs
 	DDRC = 0xFF;				//Set LEDs rows to output
-	DDRD = (1<<USART_TX);			//USART TX % RX set
-	DDRE = 0x07;				//set LEDs column to output
+	DDRD = 0xff;
+	DDRD &= ~(1<<USART_RX);			//USART TX % RX set
+	DDRE = 0xff;				//set LEDs column to output
 	DDRF = 0x00;				//all ADC to input
 }
 
@@ -194,15 +195,15 @@ void mtr_cmd(uint8_t cmd){
 		M1_DISABLE();
 		M2_DISABLE();
 	}
-	else if (cmd == FORWARD){
-		M1_ENABLE();
-		M2_ENABLE();
-		MOTOR_PORT &= ~((1<<M1_EN_PIN)|(1<<M2_DIR_PIN));
-	}
 	else if (cmd == BACKWARD){
 		M1_ENABLE();
 		M2_ENABLE();
-		MOTOR_PORT |= ((1<<M1_EN_PIN)|(1<<M2_DIR_PIN));
+		MOTOR_PORT &= ~((1<<M1_DIR_PIN)|(1<<M2_DIR_PIN));
+	}
+	else if (cmd == FORWARD){
+		M1_ENABLE();
+		M2_ENABLE();
+		MOTOR_PORT |= ((1<<M1_DIR_PIN)|(1<<M2_DIR_PIN));
 	}
 	else if (cmd == RIGHT){
 		M1_ENABLE();
@@ -232,13 +233,22 @@ int main(void){
 	
 	uint8_t states = FORWARD;
 	PORTD = 0xff;
-	while(1);
-	/*
+	PORTE = 0x00;
+	while(1){
+		states = usart_readbyte();
+		//_delay_ms(1);
+		//usart_sendbyte(states);
+		mtr_cmd(states);
+	}
+
 	//sei();
 	while(1){
 		switch(states){
-		//states = usart_readbyte();
-		states = FORWARD;
+		states = usart_readbyte();
+		if (states == BACKWARD){
+			PORTE = 4;
+		}
+		//states = FORWARD;
 			case FORWARD:
 				PORTE = 2;
 				mtr_cmd(FORWARD);
@@ -259,5 +269,5 @@ int main(void){
 		}
 
 	}
-	*/
+	
 }

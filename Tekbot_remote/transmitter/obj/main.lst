@@ -1,193 +1,265 @@
    1               		.file	"main.c"
-   2               	__SP_H__ = 0x3e
-   3               	__SP_L__ = 0x3d
-   4               	__SREG__ = 0x3f
-   5               	__tmp_reg__ = 0
-   6               	__zero_reg__ = 1
-   7               		.section	.text.ddr_setup,"ax",@progbits
-   8               	.global	ddr_setup
-  10               	ddr_setup:
-  11               	/* prologue: function */
-  12               	/* frame size = 0 */
-  13               	/* stack size = 0 */
-  14               	.L__stack_usage = 0
-  15 0000 11B8      		out 0x1,__zero_reg__
-  16 0002 80EC      		ldi r24,lo8(-64)
-  17 0004 84B9      		out 0x4,r24
-  18 0006 8FEF      		ldi r24,lo8(-1)
-  19 0008 87B9      		out 0x7,r24
-  20 000a 88E0      		ldi r24,lo8(8)
-  21 000c 8AB9      		out 0xa,r24
-  22 000e 87E0      		ldi r24,lo8(7)
-  23 0010 8DB9      		out 0xd,r24
-  24 0012 10BA      		out 0x10,__zero_reg__
-  25 0014 0895      		ret
-  27               		.section	.text.adc_read,"ax",@progbits
-  28               	.global	adc_read
-  30               	adc_read:
-  31               	/* prologue: function */
-  32               	/* frame size = 0 */
-  33               	/* stack size = 0 */
-  34               	.L__stack_usage = 0
-  35 0000 8066      		ori r24,lo8(96)
-  36 0002 8093 7C00 		sts 124,r24
-  37 0006 86EC      		ldi r24,lo8(-58)
-  38 0008 8093 7A00 		sts 122,r24
-  39               	.L3:
-  40 000c 8091 7A00 		lds r24,122
-  41 0010 84FF      		sbrs r24,4
-  42 0012 00C0      		rjmp .L3
-  43 0014 8091 7A00 		lds r24,122
-  44 0018 8061      		ori r24,lo8(16)
-  45 001a 8093 7A00 		sts 122,r24
-  46 001e 8091 7A00 		lds r24,122
-  47 0022 8064      		ori r24,lo8(64)
-  48 0024 8093 7A00 		sts 122,r24
-  49               	.L4:
-  50 0028 8091 7A00 		lds r24,122
-  51 002c 84FF      		sbrs r24,4
-  52 002e 00C0      		rjmp .L4
-  53 0030 8091 7A00 		lds r24,122
-  54 0034 8061      		ori r24,lo8(16)
-  55 0036 8093 7A00 		sts 122,r24
-  56 003a 8091 7900 		lds r24,121
-  57 003e 1092 7A00 		sts 122,__zero_reg__
-  58 0042 0895      		ret
-  60               		.section	.text.calc_speed,"ax",@progbits
-  61               	.global	calc_speed
-  63               	calc_speed:
-  64               	/* prologue: function */
-  65               	/* frame size = 0 */
-  66               	/* stack size = 0 */
-  67               	.L__stack_usage = 0
-  68 0000 6F36      		cpi r22,lo8(111)
-  69 0002 00F4      		brsh .L14
-  70 0004 8838      		cpi r24,lo8(-120)
-  71 0006 00F4      		brsh .L15
-  72 0008 80E8      		ldi r24,lo8(-128)
-  73 000a 8093 0000 		sts motor1_state,r24
-  74 000e 80E4      		ldi r24,lo8(64)
-  75 0010 8093 0000 		sts motor2_state,r24
-  76 0014 80E0      		ldi r24,0
-  77 0016 0895      		ret
-  78               	.L14:
-  79 0018 962F      		mov r25,r22
-  80 001a 9A56      		subi r25,lo8(-(-106))
-  81 001c 9062      		ori r25,lo8(32)
-  82 001e 8838      		cpi r24,lo8(-120)
-  83 0020 00F0      		brlo .L19
-  84 0022 00C0      		rjmp .L17
-  85               	.L15:
-  86 0024 9AE6      		ldi r25,lo8(106)
-  87 0026 961B      		sub r25,r22
-  88 0028 9061      		ori r25,lo8(16)
-  89               	.L17:
-  90 002a 292F      		mov r18,r25
-  91 002c 281B      		sub r18,r24
-  92 002e 822F      		mov r24,r18
-  93 0030 8D57      		subi r24,lo8(-(-125))
-  94 0032 8093 0000 		sts motor2_state,r24
-  95 0036 9093 0000 		sts motor1_state,r25
-  96 003a 00C0      		rjmp .L20
-  97               	.L19:
-  98 003c 8358      		subi r24,lo8(-(125))
-  99 003e 890F      		add r24,r25
- 100 0040 8093 0000 		sts motor1_state,r24
- 101 0044 9093 0000 		sts motor2_state,r25
- 102               	.L20:
- 103 0048 81E0      		ldi r24,lo8(1)
- 104 004a 0895      		ret
- 106               		.section	.text.usart_sendmotor,"ax",@progbits
- 107               	.global	usart_sendmotor
- 109               	usart_sendmotor:
- 110               	/* prologue: function */
- 111               	/* frame size = 0 */
- 112               	/* stack size = 0 */
- 113               	.L__stack_usage = 0
- 114 0000 8091 0000 		lds r24,motor1_state
- 115 0004 0E94 0000 		call usart_sendbyte
- 116 0008 89EF      		ldi r24,lo8(249)
- 117 000a 90E0      		ldi r25,hi8(249)
- 118 000c 0197      		1: sbiw r24,1
- 119 000e 01F4      		brne 1b
- 120 0010 00C0      		rjmp .
- 121 0012 0000      		nop
- 122 0014 8091 0000 		lds r24,motor2_state
- 123 0018 0E94 0000 		call usart_sendbyte
- 124 001c 89EF      		ldi r24,lo8(249)
- 125 001e 90E0      		ldi r25,hi8(249)
- 126 0020 0197      		1: sbiw r24,1
- 127 0022 01F4      		brne 1b
- 128 0024 00C0      		rjmp .
- 129 0026 0000      		nop
- 130 0028 81E0      		ldi r24,lo8(1)
- 131 002a 0895      		ret
- 133               		.section	.text.startup.main,"ax",@progbits
- 134               	.global	main
- 136               	main:
- 137               	/* prologue: function */
- 138               	/* frame size = 0 */
- 139               	/* stack size = 0 */
- 140               	.L__stack_usage = 0
- 141 0000 0E94 0000 		call ddr_setup
- 142 0004 60E8      		ldi r22,lo8(-128)
- 143 0006 75E2      		ldi r23,lo8(37)
- 144 0008 80E0      		ldi r24,0
- 145 000a 90E0      		ldi r25,0
- 146 000c 0E94 0000 		call usart_setup
- 147 0010 C0E0      		ldi r28,0
- 148 0012 D0E0      		ldi r29,0
- 149               	.L25:
- 150 0014 89EF      		ldi r24,lo8(249)
- 151 0016 90E0      		ldi r25,hi8(249)
- 152 0018 0197      		1: sbiw r24,1
- 153 001a 01F4      		brne 1b
- 154 001c 00C0      		rjmp .
- 155 001e 0000      		nop
- 156 0020 86E0      		ldi r24,lo8(6)
- 157 0022 0E94 0000 		call adc_read
- 158 0026 182F      		mov r17,r24
- 159 0028 85E0      		ldi r24,lo8(5)
- 160 002a 0E94 0000 		call adc_read
- 161 002e 682F      		mov r22,r24
- 162 0030 812F      		mov r24,r17
- 163 0032 0E94 0000 		call calc_speed
- 164 0036 8091 0000 		lds r24,motor1_state
- 165 003a 8D13      		cpse r24,r29
- 166 003c 00C0      		rjmp .L23
- 167 003e 8091 0000 		lds r24,motor2_state
- 168 0042 8C13      		cpse r24,r28
- 169               	.L23:
- 170 0044 0E94 0000 		call usart_sendmotor
- 171               	.L24:
- 172 0048 D091 0000 		lds r29,motor1_state
- 173 004c C091 0000 		lds r28,motor2_state
- 174 0050 00C0      		rjmp .L25
- 176               	.global	motor2_state
- 177               		.section .bss
- 180               	motor2_state:
- 181 0000 00        		.zero	1
- 182               	.global	motor1_state
- 185               	motor1_state:
- 186 0001 00        		.zero	1
- 187               		.ident	"GCC: (GNU) 4.7.2"
- 188               	.global __do_clear_bss
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.section	.text.ddr_setup,"ax",@progbits
+  11               	.global	ddr_setup
+  13               	ddr_setup:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16               	/* stack size = 0 */
+  17               	.L__stack_usage = 0
+  18 0000 11B8      		out 33-32,__zero_reg__
+  19 0002 80EC      		ldi r24,lo8(-64)
+  20 0004 84B9      		out 36-32,r24
+  21 0006 8FEF      		ldi r24,lo8(-1)
+  22 0008 87B9      		out 39-32,r24
+  23 000a 88E0      		ldi r24,lo8(8)
+  24 000c 8AB9      		out 42-32,r24
+  25 000e 87E0      		ldi r24,lo8(7)
+  26 0010 8DB9      		out 45-32,r24
+  27 0012 10BA      		out 48-32,__zero_reg__
+  28               	/* epilogue start */
+  29 0014 0895      		ret
+  31               		.section	.text.adc_read,"ax",@progbits
+  32               	.global	adc_read
+  34               	adc_read:
+  35               	/* prologue: function */
+  36               	/* frame size = 0 */
+  37               	/* stack size = 0 */
+  38               	.L__stack_usage = 0
+  39 0000 8066      		ori r24,lo8(96)
+  40 0002 8093 7C00 		sts 124,r24
+  41 0006 86EC      		ldi r24,lo8(-58)
+  42 0008 8093 7A00 		sts 122,r24
+  43               	.L3:
+  44 000c 8091 7A00 		lds r24,122
+  45 0010 84FF      		sbrs r24,4
+  46 0012 00C0      		rjmp .L3
+  47 0014 8091 7A00 		lds r24,122
+  48 0018 8061      		ori r24,lo8(16)
+  49 001a 8093 7A00 		sts 122,r24
+  50 001e 8091 7A00 		lds r24,122
+  51 0022 8064      		ori r24,lo8(64)
+  52 0024 8093 7A00 		sts 122,r24
+  53               	.L4:
+  54 0028 8091 7A00 		lds r24,122
+  55 002c 84FF      		sbrs r24,4
+  56 002e 00C0      		rjmp .L4
+  57 0030 8091 7A00 		lds r24,122
+  58 0034 8061      		ori r24,lo8(16)
+  59 0036 8093 7A00 		sts 122,r24
+  60 003a 8091 7900 		lds r24,121
+  61 003e 1092 7A00 		sts 122,__zero_reg__
+  62               	/* epilogue start */
+  63 0042 0895      		ret
+  65               		.section	.text.calc_speed,"ax",@progbits
+  66               	.global	calc_speed
+  68               	calc_speed:
+  69               	/* prologue: function */
+  70               	/* frame size = 0 */
+  71               	/* stack size = 0 */
+  72               	.L__stack_usage = 0
+  73 0000 6A38      		cpi r22,lo8(-118)
+  74 0002 00F4      		brsh .L8
+  75 0004 8838      		cpi r24,lo8(-120)
+  76 0006 00F4      		brsh .L9
+  77 0008 80E8      		ldi r24,lo8(-128)
+  78 000a 8093 0000 		sts motor1_state,r24
+  79 000e 80E4      		ldi r24,lo8(64)
+  80 0010 8093 0000 		sts motor2_state,r24
+  81 0014 80E0      		ldi r24,lo8(0)
+  82 0016 0895      		ret
+  83               	.L8:
+  84 0018 962F      		mov r25,r22
+  85 001a 9558      		subi r25,lo8(-(123))
+  86 001c 9062      		ori r25,lo8(32)
+  87 001e 8838      		cpi r24,lo8(-120)
+  88 0020 00F0      		brlo .L13
+  89 0022 00C0      		rjmp .L11
+  90               	.L9:
+  91 0024 95E8      		ldi r25,lo8(-123)
+  92 0026 961B      		sub r25,r22
+  93 0028 9061      		ori r25,lo8(16)
+  94               	.L11:
+  95 002a 292F      		mov r18,r25
+  96 002c 281B      		sub r18,r24
+  97 002e 822F      		mov r24,r18
+  98 0030 8D57      		subi r24,lo8(-(-125))
+  99 0032 8093 0000 		sts motor2_state,r24
+ 100 0036 9093 0000 		sts motor1_state,r25
+ 101 003a 81E0      		ldi r24,lo8(1)
+ 102 003c 0895      		ret
+ 103               	.L13:
+ 104 003e 8358      		subi r24,lo8(-(125))
+ 105 0040 890F      		add r24,r25
+ 106 0042 8093 0000 		sts motor1_state,r24
+ 107 0046 9093 0000 		sts motor2_state,r25
+ 108 004a 81E0      		ldi r24,lo8(1)
+ 109 004c 0895      		ret
+ 111               		.section	.text.set_mtr_state,"ax",@progbits
+ 112               	.global	set_mtr_state
+ 114               	set_mtr_state:
+ 115               	/* prologue: function */
+ 116               	/* frame size = 0 */
+ 117               	/* stack size = 0 */
+ 118               	.L__stack_usage = 0
+ 119 0000 6B38      		cpi r22,lo8(-117)
+ 120 0002 00F0      		brlo .L15
+ 121 0004 80E2      		ldi r24,lo8(32)
+ 122 0006 00C0      		rjmp .L20
+ 123               	.L15:
+ 124 0008 67FD      		sbrc r22,7
+ 125 000a 00C0      		rjmp .L17
+ 126 000c 80E1      		ldi r24,lo8(16)
+ 127 000e 00C0      		rjmp .L20
+ 128               	.L17:
+ 129 0010 8938      		cpi r24,lo8(-119)
+ 130 0012 00F0      		brlo .L18
+ 131 0014 82E2      		ldi r24,lo8(34)
+ 132 0016 00C0      		rjmp .L20
+ 133               	.L18:
+ 134 0018 8E37      		cpi r24,lo8(126)
+ 135 001a 00F4      		brsh .L19
+ 136 001c 83E3      		ldi r24,lo8(51)
+ 137 001e 00C0      		rjmp .L20
+ 138               	.L19:
+ 139 0020 8AE3      		ldi r24,lo8(58)
+ 140               	.L20:
+ 141 0022 8093 0000 		sts mtr_state,r24
+ 142 0026 0895      		ret
+ 144               		.section	.text.usart_sendmotor,"ax",@progbits
+ 145               	.global	usart_sendmotor
+ 147               	usart_sendmotor:
+ 148               	/* prologue: function */
+ 149               	/* frame size = 0 */
+ 150               	/* stack size = 0 */
+ 151               	.L__stack_usage = 0
+ 152 0000 8091 0000 		lds r24,motor1_state
+ 153 0004 0E94 0000 		call usart_sendbyte
+ 154 0008 89EF      		 ldi r24,lo8(249)
+ 155 000a 90E0      	    ldi r25,hi8(249)
+ 156 000c 0197      	    1:sbiw r24,1
+ 157 000e 01F4      	    brne 1b
+ 158 0010 00C0      		rjmp .
+ 159 0012 0000      		nop
+ 160 0014 8091 0000 		lds r24,motor2_state
+ 161 0018 0E94 0000 		call usart_sendbyte
+ 162 001c 89EF      		 ldi r24,lo8(249)
+ 163 001e 90E0      	    ldi r25,hi8(249)
+ 164 0020 0197      	    1:sbiw r24,1
+ 165 0022 01F4      	    brne 1b
+ 166 0024 00C0      		rjmp .
+ 167 0026 0000      		nop
+ 168 0028 81E0      		ldi r24,lo8(1)
+ 169               	/* epilogue start */
+ 170 002a 0895      		ret
+ 172               		.section	.text.clearArray,"ax",@progbits
+ 173               	.global	clearArray
+ 175               	clearArray:
+ 176               	/* prologue: function */
+ 177               	/* frame size = 0 */
+ 178               	/* stack size = 0 */
+ 179               	.L__stack_usage = 0
+ 180 0000 18B8      		out 40-32,__zero_reg__
+ 181 0002 85B1      		in r24,37-32
+ 182 0004 806C      		ori r24,lo8(-64)
+ 183 0006 85B9      		out 37-32,r24
+ 184 0008 85B1      		in r24,37-32
+ 185 000a 8F73      		andi r24,lo8(63)
+ 186 000c 85B9      		out 37-32,r24
+ 187               	/* epilogue start */
+ 188 000e 0895      		ret
+ 190               		.section	.text.startup.main,"ax",@progbits
+ 191               	.global	main
+ 193               	main:
+ 194               	/* prologue: function */
+ 195               	/* frame size = 0 */
+ 196               	/* stack size = 0 */
+ 197               	.L__stack_usage = 0
+ 198 0000 0E94 0000 		call ddr_setup
+ 199 0004 60E8      		ldi r22,lo8(9600)
+ 200 0006 75E2      		ldi r23,hi8(9600)
+ 201 0008 80E0      		ldi r24,hlo8(9600)
+ 202 000a 90E0      		ldi r25,hhi8(9600)
+ 203 000c 0E94 0000 		call usart_setup
+ 204               	.L31:
+ 205 0010 89EF      		 ldi r24,lo8(249)
+ 206 0012 90E0      	    ldi r25,hi8(249)
+ 207 0014 0197      	    1:sbiw r24,1
+ 208 0016 01F4      	    brne 1b
+ 209 0018 00C0      		rjmp .
+ 210 001a 0000      		nop
+ 211 001c 86E0      		ldi r24,lo8(6)
+ 212 001e 0E94 0000 		call adc_read
+ 213 0022 C82F      		mov r28,r24
+ 214 0024 85E0      		ldi r24,lo8(5)
+ 215 0026 0E94 0000 		call adc_read
+ 216 002a 682F      		mov r22,r24
+ 217 002c 8C2F      		mov r24,r28
+ 218 002e 0E94 0000 		call set_mtr_state
+ 219 0032 8091 0000 		lds r24,mtr_state
+ 220 0036 0E94 0000 		call usart_sendbyte
+ 221 003a 009B      		sbis 32-32,0
+ 222 003c 00C0      		rjmp .L25
+ 223 003e 80E2      		ldi r24,lo8(32)
+ 224 0040 00C0      		rjmp .L32
+ 225               	.L25:
+ 226 0042 019B      		sbis 32-32,1
+ 227 0044 00C0      		rjmp .L27
+ 228 0046 80E1      		ldi r24,lo8(16)
+ 229 0048 00C0      		rjmp .L32
+ 230               	.L27:
+ 231 004a 029B      		sbis 32-32,2
+ 232 004c 00C0      		rjmp .L28
+ 233 004e 82E2      		ldi r24,lo8(34)
+ 234 0050 00C0      		rjmp .L32
+ 235               	.L28:
+ 236 0052 039B      		sbis 32-32,3
+ 237 0054 00C0      		rjmp .L31
+ 238 0056 83E3      		ldi r24,lo8(51)
+ 239               	.L32:
+ 240 0058 0E94 0000 		call usart_sendbyte
+ 241 005c 00C0      		rjmp .L31
+ 243               	.global	mtr_state
+ 244               	.global	mtr_state
+ 245               		.section .bss
+ 248               	mtr_state:
+ 249 0000 00        		.skip 1,0
+ 250               	.global	motor2_state
+ 251               	.global	motor2_state
+ 254               	motor2_state:
+ 255 0001 00        		.skip 1,0
+ 256               	.global	motor1_state
+ 257               	.global	motor1_state
+ 260               	motor1_state:
+ 261 0002 00        		.skip 1,0
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:2      *ABS*:0000003e __SP_H__
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:3      *ABS*:0000003d __SP_L__
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:4      *ABS*:0000003f __SREG__
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:5      *ABS*:00000000 __tmp_reg__
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:6      *ABS*:00000001 __zero_reg__
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:10     .text.ddr_setup:00000000 ddr_setup
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:30     .text.adc_read:00000000 adc_read
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:63     .text.calc_speed:00000000 calc_speed
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:185    .bss:00000001 motor1_state
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:180    .bss:00000000 motor2_state
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:109    .text.usart_sendmotor:00000000 usart_sendmotor
-/var/folders/ln/c7glznsd7wx_wx4bm67zgk_m0000gn/T//ccUUW8vm.s:136    .text.startup.main:00000000 main
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:2      *ABS*:0000003f __SREG__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:3      *ABS*:0000003e __SP_H__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:4      *ABS*:0000003d __SP_L__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:5      *ABS*:00000034 __CCP__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:13     .text.ddr_setup:00000000 ddr_setup
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:34     .text.adc_read:00000000 adc_read
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:68     .text.calc_speed:00000000 calc_speed
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:260    .bss:00000002 motor1_state
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:254    .bss:00000001 motor2_state
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:114    .text.set_mtr_state:00000000 set_mtr_state
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:248    .bss:00000000 mtr_state
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:147    .text.usart_sendmotor:00000000 usart_sendmotor
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:175    .text.clearArray:00000000 clearArray
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cca1xxpz.s:193    .text.startup.main:00000000 main
 
 UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
 usart_sendbyte
 usart_setup
-__do_clear_bss

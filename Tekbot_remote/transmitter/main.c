@@ -23,6 +23,7 @@
 
 /******************************************************************/
 
+#define F_CPU 1000000UL
 //includes
 #include<avr/io.h>
 #include<avr/interrupt.h>
@@ -39,8 +40,8 @@
 #define X_NOR		0x83
 #define X_MAX		0x9D
 #define Y_AXIS		5
-#define Y_MIN		0x85
-#define Y_NOR		0x6A
+#define Y_MIN		0x6A
+#define Y_NOR		0x85
 #define Y_MAX		0x9F
 #define DEAD_ZONE	5
 #define BAUD		9600
@@ -142,25 +143,52 @@ uint8_t calc_speed(uint8_t x_data, uint8_t y_data){
 
 }
 
-void set_mtr_state(xdata, ydata){
-	
-	if ( (ydata < (Y_NOR + DEAD_ZONE)) && (ydata > (Y_NOR - DEAD_ZONE)) \
-			(xdata < (X_NOR + DEAD_ZONE)) && (xdata > (X_NOR - DEAD_ZONE))){
+void set_mtr_state(uint8_t xdata, uint8_t ydata){
+	/*	
+		if ( (ydata < (Y_NOR + DEAD_ZONE)) && (ydata > (Y_NOR - DEAD_ZONE)) && (xdata < (X_NOR + DEAD_ZONE)) && (xdata > (X_NOR - DEAD_ZONE))){
 		mtr_state = STOP;
 		return;
-	}
-	else if (ydata > (Y_NOR + DEAD_ZONE)){
+		}
+		*/
+	/*
+	   else if (ydata > (Y_NOR + DEAD_ZONE)){
+	   mtr_state = FORWARD;
+	   } 
+	   else if (ydata < (Y_NOR - DEAD_ZONE)){
+	   mtr_state = BACKWARD;
+	   } 
+	   else if ( xdata > (X_NOR + DEAD_ZONE)){
+	   mtr_state = RIGHT;
+	   }
+	   else {
+	   mtr_state = LEFT;
+	   }
+	   */
+
+	//mtr_state = STOP;
+
+	if (ydata > (Y_NOR+DEAD_ZONE)){
 		mtr_state = FORWARD;
-	} 
-	else if (ydata < (Y_NOR - DEAD_ZONE)){
+		return;
+	}
+	else if (ydata < (Y_NOR-DEAD_ZONE)){
 		mtr_state = BACKWARD;
-	} 
-	else if ( xdata > (X_NOR + DEAD_ZONE)){
+		return;
+	}
+	if ( xdata > (X_NOR + DEAD_ZONE)){
 		mtr_state = RIGHT;
+		return;
 	}
-	else {
+	else if ( xdata < (X_NOR - DEAD_ZONE)){
 		mtr_state = LEFT;
+		return;
 	}
+
+	//else {
+	mtr_state = STOP;
+	//}
+
+
 	return;
 
 
@@ -198,30 +226,36 @@ int main(void){
 
 	uint8_t adc_data_xaxis = 0;	//hold x tilt data
 	uint8_t adc_data_yaxis = 0;	//hold y tilt data
-	
+
 	uint8_t motor1_prev = 0;	//hold previous m1 state
 	uint8_t motor2_prev = 0;	//hold previous m2 state
 	uint8_t mtr_prev = 0;
+
+
 	while(1){
 		_delay_ms(1);				//just wait
 		adc_data_xaxis = adc_read(X_AXIS);	//read x tilt
 		adc_data_yaxis = adc_read(Y_AXIS);	//read y tilt
-		
-		/*
-		calc_speed(adc_data_xaxis, adc_data_yaxis);	//calc motor
-		if ( (motor1_state != motor1_prev) || (motor2_state != motor2_prev) ){
-			usart_sendmotor();		//if new data send motor data
-		}
-		motor1_prev = motor1_state;		//save previous m1 state
-		motor2_prev = motor2_state;		//save previous m2 state
-		*/
+
 
 		set_mtr_state(adc_data_xaxis, adc_data_yaxis);
-		if ( mtr_state != mtr_prev){
-			usart_sendbyte(mtr_state);
-		}
+		//if ( mtr_state != mtr_prev){
+		usart_sendbyte(mtr_state);
+		//}
 		mtr_prev = mtr_state;
-
+		if (PINA & (1<<0)){
+			usart_sendbyte(FORWARD);
+		}
+		else if (PINA & (1<<1)){
+			usart_sendbyte(BACKWARD);
+		}
+		else if (PINA & (1<<2)){
+			usart_sendbyte(RIGHT);
+		}
+		else if (PINA & (1<<3)){
+			usart_sendbyte(LEFT);
+		}
 	}
+
 
 }

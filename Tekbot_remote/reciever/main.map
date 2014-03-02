@@ -17,15 +17,12 @@ Discarded input sections
                 0x00000000       0x2e obj/main.o
  .text.motor_speed
                 0x00000000       0x2a obj/main.o
- .text.mtr_cmd  0x00000000       0x44 obj/main.o
  .text          0x00000000        0x0 obj/usart.o
  .bss           0x00000000        0x0 obj/usart.o
  .text.usart_sendbyte
                 0x00000000        0xe obj/usart.o
  .text.usart_sendarray
                 0x00000000       0x3c obj/usart.o
- .text.usart_readbyte
-                0x00000000        0xe obj/usart.o
  .text          0x00000000        0x0 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_udivmodsi4.o)
  .bss           0x00000000        0x0 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_udivmodsi4.o)
  .text          0x00000000        0x0 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_exit.o)
@@ -150,7 +147,7 @@ LOAD /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x258
+.text           0x00000000      0x2ae
  *(.vectors)
  .vectors       0x00000000       0x98 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/lib/avr5/crtusb646.o
                 0x00000000                __vectors
@@ -244,33 +241,38 @@ LOAD /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a
                 0x000000d0                . = ALIGN (0x2)
  *(.text.*)
  .text.ddr_setup
-                0x000000d0       0x16 obj/main.o
+                0x000000d0       0x14 obj/main.o
                 0x000000d0                ddr_setup
  .text.__vector_25
-                0x000000e6       0x3a obj/main.o
-                0x000000e6                __vector_25
+                0x000000e4       0x3a obj/main.o
+                0x000000e4                __vector_25
  .text.__vector_17
-                0x00000120       0x46 obj/main.o
-                0x00000120                __vector_17
+                0x0000011e       0x46 obj/main.o
+                0x0000011e                __vector_17
  .text.__vector_18
-                0x00000166       0x46 obj/main.o
-                0x00000166                __vector_18
+                0x00000164       0x46 obj/main.o
+                0x00000164                __vector_18
  .text.clearArray
-                0x000001ac       0x10 obj/main.o
-                0x000001ac                clearArray
+                0x000001aa       0x10 obj/main.o
+                0x000001aa                clearArray
+ .text.mtr_cmd  0x000001ba       0x44 obj/main.o
+                0x000001ba                mtr_cmd
  .text.startup.main
-                0x000001bc       0x1a obj/main.o
-                0x000001bc                main
+                0x000001fe       0x20 obj/main.o
+                0x000001fe                main
  .text.usart_setup
-                0x000001d6       0x3a obj/usart.o
-                0x000001d6                usart_setup
- .text.libgcc   0x00000210       0x44 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_udivmodsi4.o)
-                0x00000210                __udivmodsi4
-                0x00000254                . = ALIGN (0x2)
+                0x0000021e       0x3a obj/usart.o
+                0x0000021e                usart_setup
+ .text.usart_readbyte
+                0x00000258        0xe obj/usart.o
+                0x00000258                usart_readbyte
+ .text.libgcc   0x00000266       0x44 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_udivmodsi4.o)
+                0x00000266                __udivmodsi4
+                0x000002aa                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000254        0x0 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_exit.o)
-                0x00000254                exit
-                0x00000254                _exit
+ .fini9         0x000002aa        0x0 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_exit.o)
+                0x000002aa                exit
+                0x000002aa                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -289,11 +291,11 @@ LOAD /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000254        0x4 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_exit.o)
+ .fini0         0x000002aa        0x4 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a(_exit.o)
  *(.fini0)
-                0x00000258                _etext = .
+                0x000002ae                _etext = .
 
-.data           0x00800100        0x0 load address 0x00000258
+.data           0x00800100        0x0 load address 0x000002ae
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/lib/avr5/crtusb646.o
@@ -320,8 +322,8 @@ LOAD /usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/avr5/libgcc.a
  *(.bss*)
  *(COMMON)
                 0x00800102                PROVIDE (__bss_end, .)
-                0x00000258                __data_load_start = LOADADDR (.data)
-                0x00000258                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000002ae                __data_load_start = LOADADDR (.data)
+                0x000002ae                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800102        0x0
                 0x00800102                PROVIDE (__noinit_start, .)
@@ -506,6 +508,7 @@ motor_speed                                       obj/main.o
 mtr_cmd                                           obj/main.o
 pwm_setup                                         obj/main.o
 usart_readbyte                                    obj/usart.o
+                                                  obj/main.o
 usart_sendarray                                   obj/usart.o
 usart_sendbyte                                    obj/usart.o
 usart_setup                                       obj/usart.o
