@@ -239,15 +239,16 @@ int main(void){
 		//_delay_ms(1);
 		//usart_sendbyte(states);
 		mtr_cmd(states);
+		_delay_ms(1);
 	}
 
 	//sei();
 	while(1){
-		switch(states){
 		states = usart_readbyte();
-		if (states == BACKWARD){
-			PORTE = 4;
-		}
+		switch(states){
+		//if (states == BACKWARD){
+		//	PORTE = 4;
+		//}
 		//states = FORWARD;
 			case FORWARD:
 				PORTE = 2;
@@ -267,6 +268,7 @@ int main(void){
 				break;
 
 		}
+		_delay_ms(1);
 
 	}
 	
