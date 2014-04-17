@@ -1,0 +1,344 @@
+   1               		.file	"animation.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.section	.text.SetupAnimation,"ax",@progbits
+  11               	.global	SetupAnimation
+  13               	SetupAnimation:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16               	/* stack size = 0 */
+  17               	.L__stack_usage = 0
+  18 0000 8CE3      		ldi r24,lo8(60)
+  19 0002 8093 0000 		sts face_animation,r24
+  20 0006 2EE7      		ldi r18,lo8(126)
+  21 0008 2093 0000 		sts face_animation+1,r18
+  22 000c 9BED      		ldi r25,lo8(-37)
+  23 000e 9093 0000 		sts face_animation+2,r25
+  24 0012 3FEB      		ldi r19,lo8(-65)
+  25 0014 3093 0000 		sts face_animation+3,r19
+  26 0018 3093 0000 		sts face_animation+4,r19
+  27 001c 9093 0000 		sts face_animation+5,r25
+  28 0020 2093 0000 		sts face_animation+6,r18
+  29 0024 8093 0000 		sts face_animation+7,r24
+  30 0028 8093 0000 		sts face_animation+8,r24
+  31 002c 2093 0000 		sts face_animation+9,r18
+  32 0030 9093 0000 		sts face_animation+10,r25
+  33 0034 3093 0000 		sts face_animation+11,r19
+  34 0038 3093 0000 		sts face_animation+12,r19
+  35 003c 9093 0000 		sts face_animation+13,r25
+  36 0040 2093 0000 		sts face_animation+14,r18
+  37 0044 8093 0000 		sts face_animation+15,r24
+  38 0048 8093 0000 		sts face_animation+16,r24
+  39 004c 2093 0000 		sts face_animation+17,r18
+  40 0050 9093 0000 		sts face_animation+18,r25
+  41 0054 3093 0000 		sts face_animation+19,r19
+  42 0058 3093 0000 		sts face_animation+20,r19
+  43 005c 9093 0000 		sts face_animation+21,r25
+  44 0060 2093 0000 		sts face_animation+22,r18
+  45 0064 8093 0000 		sts face_animation+23,r24
+  46 0068 E0E0      		ldi r30,lo8(animation)
+  47 006a F0E0      		ldi r31,hi8(animation)
+  48 006c 1092 0000 		sts animation,__zero_reg__
+  49 0070 1092 0000 		sts animation+1,__zero_reg__
+  50 0074 1092 0000 		sts animation+2,__zero_reg__
+  51 0078 1092 0000 		sts animation+3,__zero_reg__
+  52 007c 1092 0000 		sts animation+4,__zero_reg__
+  53 0080 1092 0000 		sts animation+5,__zero_reg__
+  54 0084 1092 0000 		sts animation+6,__zero_reg__
+  55 0088 1092 0000 		sts animation+7,__zero_reg__
+  56 008c 1092 0000 		sts animation+8,__zero_reg__
+  57 0090 1092 0000 		sts animation+9,__zero_reg__
+  58 0094 1092 0000 		sts animation+10,__zero_reg__
+  59 0098 1092 0000 		sts animation+11,__zero_reg__
+  60 009c 1092 0000 		sts animation+12,__zero_reg__
+  61 00a0 1092 0000 		sts animation+13,__zero_reg__
+  62 00a4 1092 0000 		sts animation+14,__zero_reg__
+  63 00a8 1092 0000 		sts animation+15,__zero_reg__
+  64 00ac 1092 0000 		sts animation+16,__zero_reg__
+  65 00b0 1092 0000 		sts animation+17,__zero_reg__
+  66 00b4 1092 0000 		sts animation+18,__zero_reg__
+  67 00b8 1092 0000 		sts animation+19,__zero_reg__
+  68 00bc 1092 0000 		sts animation+20,__zero_reg__
+  69 00c0 1092 0000 		sts animation+21,__zero_reg__
+  70 00c4 1092 0000 		sts animation+22,__zero_reg__
+  71 00c8 1092 0000 		sts animation+23,__zero_reg__
+  72 00cc 1092 0000 		sts animation+24,__zero_reg__
+  73 00d0 1092 0000 		sts animation+25,__zero_reg__
+  74 00d4 1092 0000 		sts animation+26,__zero_reg__
+  75 00d8 1092 0000 		sts animation+27,__zero_reg__
+  76 00dc 1092 0000 		sts animation+28,__zero_reg__
+  77 00e0 1092 0000 		sts animation+29,__zero_reg__
+  78 00e4 1092 0000 		sts animation+30,__zero_reg__
+  79 00e8 1092 0000 		sts animation+31,__zero_reg__
+  80 00ec 80E8      		ldi r24,lo8(-128)
+  81 00ee 8093 0000 		sts animation+32,r24
+  82 00f2 8093 0000 		sts animation+33,r24
+  83 00f6 8093 0000 		sts animation+34,r24
+  84 00fa 8093 0000 		sts animation+35,r24
+  85 00fe 8093 0000 		sts animation+36,r24
+  86 0102 8093 0000 		sts animation+37,r24
+  87 0106 8093 0000 		sts animation+38,r24
+  88 010a 8093 0000 		sts animation+39,r24
+  89 010e 1092 0000 		sts animation+40,__zero_reg__
+  90 0112 1092 0000 		sts animation+41,__zero_reg__
+  91 0116 1092 0000 		sts animation+42,__zero_reg__
+  92 011a 1092 0000 		sts animation+43,__zero_reg__
+  93 011e 1092 0000 		sts animation+44,__zero_reg__
+  94 0122 1092 0000 		sts animation+45,__zero_reg__
+  95 0126 1092 0000 		sts animation+46,__zero_reg__
+  96 012a 1092 0000 		sts animation+47,__zero_reg__
+  97 012e 1092 0000 		sts animation+48,__zero_reg__
+  98 0132 1092 0000 		sts animation+49,__zero_reg__
+  99 0136 1092 0000 		sts animation+50,__zero_reg__
+ 100 013a 1092 0000 		sts animation+51,__zero_reg__
+ 101 013e 1092 0000 		sts animation+52,__zero_reg__
+ 102 0142 1092 0000 		sts animation+53,__zero_reg__
+ 103 0146 1092 0000 		sts animation+54,__zero_reg__
+ 104 014a 1092 0000 		sts animation+55,__zero_reg__
+ 105 014e 8093 0000 		sts animation+56,r24
+ 106 0152 8093 0000 		sts animation+57,r24
+ 107 0156 8093 0000 		sts animation+58,r24
+ 108 015a 8093 0000 		sts animation+59,r24
+ 109 015e 8093 0000 		sts animation+60,r24
+ 110 0162 85AF      		std Z+61,r24
+ 111 0164 86AF      		std Z+62,r24
+ 112 0166 87AF      		std Z+63,r24
+ 113 0168 1092 0000 		sts animation+64,__zero_reg__
+ 114 016c 1092 0000 		sts animation+65,__zero_reg__
+ 115 0170 30E4      		ldi r19,lo8(64)
+ 116 0172 3093 0000 		sts animation+66,r19
+ 117 0176 3093 0000 		sts animation+67,r19
+ 118 017a 3093 0000 		sts animation+68,r19
+ 119 017e 3093 0000 		sts animation+69,r19
+ 120 0182 1092 0000 		sts animation+70,__zero_reg__
+ 121 0186 1092 0000 		sts animation+71,__zero_reg__
+ 122 018a 1092 0000 		sts animation+72,__zero_reg__
+ 123 018e 1092 0000 		sts animation+73,__zero_reg__
+ 124 0192 1092 0000 		sts animation+74,__zero_reg__
+ 125 0196 1092 0000 		sts animation+75,__zero_reg__
+ 126 019a 1092 0000 		sts animation+76,__zero_reg__
+ 127 019e 1092 0000 		sts animation+77,__zero_reg__
+ 128 01a2 1092 0000 		sts animation+78,__zero_reg__
+ 129 01a6 1092 0000 		sts animation+79,__zero_reg__
+ 130 01aa 8093 0000 		sts animation+80,r24
+ 131 01ae 8093 0000 		sts animation+81,r24
+ 132 01b2 8093 0000 		sts animation+82,r24
+ 133 01b6 8093 0000 		sts animation+83,r24
+ 134 01ba 8093 0000 		sts animation+84,r24
+ 135 01be 8093 0000 		sts animation+85,r24
+ 136 01c2 8093 0000 		sts animation+86,r24
+ 137 01c6 8093 0000 		sts animation+87,r24
+ 138 01ca 1092 0000 		sts animation+88,__zero_reg__
+ 139 01ce 1092 0000 		sts animation+89,__zero_reg__
+ 140 01d2 90E6      		ldi r25,lo8(96)
+ 141 01d4 9093 0000 		sts animation+90,r25
+ 142 01d8 9093 0000 		sts animation+91,r25
+ 143 01dc 9093 0000 		sts animation+92,r25
+ 144 01e0 9093 0000 		sts animation+93,r25
+ 145 01e4 1092 0000 		sts animation+94,__zero_reg__
+ 146 01e8 1092 0000 		sts animation+95,__zero_reg__
+ 147 01ec 1092 0000 		sts animation+96,__zero_reg__
+ 148 01f0 1092 0000 		sts animation+97,__zero_reg__
+ 149 01f4 1092 0000 		sts animation+98,__zero_reg__
+ 150 01f8 1092 0000 		sts animation+99,__zero_reg__
+ 151 01fc 1092 0000 		sts animation+100,__zero_reg__
+ 152 0200 1092 0000 		sts animation+101,__zero_reg__
+ 153 0204 1092 0000 		sts animation+102,__zero_reg__
+ 154 0208 1092 0000 		sts animation+103,__zero_reg__
+ 155 020c 8093 0000 		sts animation+104,r24
+ 156 0210 8093 0000 		sts animation+105,r24
+ 157 0214 8093 0000 		sts animation+106,r24
+ 158 0218 8093 0000 		sts animation+107,r24
+ 159 021c 8093 0000 		sts animation+108,r24
+ 160 0220 8093 0000 		sts animation+109,r24
+ 161 0224 8093 0000 		sts animation+110,r24
+ 162 0228 8093 0000 		sts animation+111,r24
+ 163 022c 1092 0000 		sts animation+112,__zero_reg__
+ 164 0230 1092 0000 		sts animation+113,__zero_reg__
+ 165 0234 90E7      		ldi r25,lo8(112)
+ 166 0236 9093 0000 		sts animation+114,r25
+ 167 023a 9093 0000 		sts animation+115,r25
+ 168 023e 9093 0000 		sts animation+116,r25
+ 169 0242 9093 0000 		sts animation+117,r25
+ 170 0246 1092 0000 		sts animation+118,__zero_reg__
+ 171 024a 1092 0000 		sts animation+119,__zero_reg__
+ 172 024e 1092 0000 		sts animation+120,__zero_reg__
+ 173 0252 1092 0000 		sts animation+121,__zero_reg__
+ 174 0256 1092 0000 		sts animation+122,__zero_reg__
+ 175 025a 1092 0000 		sts animation+123,__zero_reg__
+ 176 025e 1092 0000 		sts animation+124,__zero_reg__
+ 177 0262 1092 0000 		sts animation+125,__zero_reg__
+ 178 0266 1092 0000 		sts animation+126,__zero_reg__
+ 179 026a 1092 0000 		sts animation+127,__zero_reg__
+ 180 026e 8093 0000 		sts animation+128,r24
+ 181 0272 8093 0000 		sts animation+129,r24
+ 182 0276 8093 0000 		sts animation+130,r24
+ 183 027a 8093 0000 		sts animation+131,r24
+ 184 027e 8093 0000 		sts animation+132,r24
+ 185 0282 8093 0000 		sts animation+133,r24
+ 186 0286 8093 0000 		sts animation+134,r24
+ 187 028a 8093 0000 		sts animation+135,r24
+ 188 028e 1092 0000 		sts animation+136,__zero_reg__
+ 189 0292 1092 0000 		sts animation+137,__zero_reg__
+ 190 0296 9093 0000 		sts animation+138,r25
+ 191 029a 4CE7      		ldi r20,lo8(124)
+ 192 029c 4093 0000 		sts animation+139,r20
+ 193 02a0 4093 0000 		sts animation+140,r20
+ 194 02a4 9093 0000 		sts animation+141,r25
+ 195 02a8 1092 0000 		sts animation+142,__zero_reg__
+ 196 02ac 1092 0000 		sts animation+143,__zero_reg__
+ 197 02b0 1092 0000 		sts animation+144,__zero_reg__
+ 198 02b4 98E0      		ldi r25,lo8(8)
+ 199 02b6 9093 0000 		sts animation+145,r25
+ 200 02ba 54E0      		ldi r21,lo8(4)
+ 201 02bc 5093 0000 		sts animation+146,r21
+ 202 02c0 62E0      		ldi r22,lo8(2)
+ 203 02c2 6093 0000 		sts animation+147,r22
+ 204 02c6 6093 0000 		sts animation+148,r22
+ 205 02ca 5093 0000 		sts animation+149,r21
+ 206 02ce 9093 0000 		sts animation+150,r25
+ 207 02d2 1092 0000 		sts animation+151,__zero_reg__
+ 208 02d6 8093 0000 		sts animation+152,r24
+ 209 02da 8093 0000 		sts animation+153,r24
+ 210 02de 8093 0000 		sts animation+154,r24
+ 211 02e2 8093 0000 		sts animation+155,r24
+ 212 02e6 8093 0000 		sts animation+156,r24
+ 213 02ea 8093 0000 		sts animation+157,r24
+ 214 02ee 8093 0000 		sts animation+158,r24
+ 215 02f2 8093 0000 		sts animation+159,r24
+ 216 02f6 1092 0000 		sts animation+160,__zero_reg__
+ 217 02fa 9093 0000 		sts animation+161,r25
+ 218 02fe 4093 0000 		sts animation+162,r20
+ 219 0302 2093 0000 		sts animation+163,r18
+ 220 0306 2093 0000 		sts animation+164,r18
+ 221 030a 4093 0000 		sts animation+165,r20
+ 222 030e 9093 0000 		sts animation+166,r25
+ 223 0312 1092 0000 		sts animation+167,__zero_reg__
+ 224 0316 1092 0000 		sts animation+168,__zero_reg__
+ 225 031a 9093 0000 		sts animation+169,r25
+ 226 031e 27E0      		ldi r18,lo8(7)
+ 227 0320 2093 0000 		sts animation+170,r18
+ 228 0324 22E1      		ldi r18,lo8(18)
+ 229 0326 2093 0000 		sts animation+171,r18
+ 230 032a 22E6      		ldi r18,lo8(98)
+ 231 032c 2093 0000 		sts animation+172,r18
+ 232 0330 5093 0000 		sts animation+173,r21
+ 233 0334 9093 0000 		sts animation+174,r25
+ 234 0338 1092 0000 		sts animation+175,__zero_reg__
+ 235 033c 8093 0000 		sts animation+176,r24
+ 236 0340 8093 0000 		sts animation+177,r24
+ 237 0344 8093 0000 		sts animation+178,r24
+ 238 0348 8093 0000 		sts animation+179,r24
+ 239 034c 8093 0000 		sts animation+180,r24
+ 240 0350 8093 0000 		sts animation+181,r24
+ 241 0354 8093 0000 		sts animation+182,r24
+ 242 0358 8093 0000 		sts animation+183,r24
+ 243 035c 1092 0000 		sts animation+184,__zero_reg__
+ 244 0360 9093 0000 		sts animation+185,r25
+ 245 0364 4093 0000 		sts animation+186,r20
+ 246 0368 2EE6      		ldi r18,lo8(110)
+ 247 036a 2093 0000 		sts animation+187,r18
+ 248 036e 2EE1      		ldi r18,lo8(30)
+ 249 0370 2093 0000 		sts animation+188,r18
+ 250 0374 4093 0000 		sts animation+189,r20
+ 251 0378 9093 0000 		sts animation+190,r25
+ 252 037c 1092 0000 		sts animation+191,__zero_reg__
+ 253 0380 1092 0000 		sts animation+192,__zero_reg__
+ 254 0384 1092 0000 		sts animation+193,__zero_reg__
+ 255 0388 1092 0000 		sts animation+194,__zero_reg__
+ 256 038c 1092 0000 		sts animation+195,__zero_reg__
+ 257 0390 1092 0000 		sts animation+196,__zero_reg__
+ 258 0394 1092 0000 		sts animation+197,__zero_reg__
+ 259 0398 1092 0000 		sts animation+198,__zero_reg__
+ 260 039c 1092 0000 		sts animation+199,__zero_reg__
+ 261 03a0 8093 0000 		sts animation+200,r24
+ 262 03a4 8093 0000 		sts animation+201,r24
+ 263 03a8 8093 0000 		sts animation+202,r24
+ 264 03ac 8093 0000 		sts animation+203,r24
+ 265 03b0 8093 0000 		sts animation+204,r24
+ 266 03b4 8093 0000 		sts animation+205,r24
+ 267 03b8 8093 0000 		sts animation+206,r24
+ 268 03bc 8093 0000 		sts animation+207,r24
+ 269 03c0 1092 0000 		sts animation+208,__zero_reg__
+ 270 03c4 1092 0000 		sts animation+209,__zero_reg__
+ 271 03c8 96E5      		ldi r25,lo8(86)
+ 272 03ca 9093 0000 		sts animation+210,r25
+ 273 03ce 2EE3      		ldi r18,lo8(62)
+ 274 03d0 2093 0000 		sts animation+211,r18
+ 275 03d4 9093 0000 		sts animation+212,r25
+ 276 03d8 1092 0000 		sts animation+213,__zero_reg__
+ 277 03dc 1092 0000 		sts animation+214,__zero_reg__
+ 278 03e0 1092 0000 		sts animation+215,__zero_reg__
+ 279 03e4 1092 0000 		sts animation+216,__zero_reg__
+ 280 03e8 9EE0      		ldi r25,lo8(14)
+ 281 03ea 9093 0000 		sts animation+217,r25
+ 282 03ee 1092 0000 		sts animation+218,__zero_reg__
+ 283 03f2 1092 0000 		sts animation+219,__zero_reg__
+ 284 03f6 1092 0000 		sts animation+220,__zero_reg__
+ 285 03fa 1092 0000 		sts animation+221,__zero_reg__
+ 286 03fe 9093 0000 		sts animation+222,r25
+ 287 0402 1092 0000 		sts animation+223,__zero_reg__
+ 288 0406 1092 0000 		sts animation+224,__zero_reg__
+ 289 040a 1092 0000 		sts animation+225,__zero_reg__
+ 290 040e 1092 0000 		sts animation+226,__zero_reg__
+ 291 0412 1092 0000 		sts animation+227,__zero_reg__
+ 292 0416 1092 0000 		sts animation+228,__zero_reg__
+ 293 041a 1092 0000 		sts animation+229,__zero_reg__
+ 294 041e 1092 0000 		sts animation+230,__zero_reg__
+ 295 0422 1092 0000 		sts animation+231,__zero_reg__
+ 296 0426 1092 0000 		sts animation+232,__zero_reg__
+ 297 042a 1092 0000 		sts animation+233,__zero_reg__
+ 298 042e 1092 0000 		sts animation+234,__zero_reg__
+ 299 0432 1092 0000 		sts animation+235,__zero_reg__
+ 300 0436 1092 0000 		sts animation+236,__zero_reg__
+ 301 043a 1092 0000 		sts animation+237,__zero_reg__
+ 302 043e 1092 0000 		sts animation+238,__zero_reg__
+ 303 0442 1092 0000 		sts animation+239,__zero_reg__
+ 304 0446 1092 0000 		sts animation+240,__zero_reg__
+ 305 044a 9093 0000 		sts animation+241,r25
+ 306 044e 1092 0000 		sts animation+242,__zero_reg__
+ 307 0452 1092 0000 		sts animation+243,__zero_reg__
+ 308 0456 1092 0000 		sts animation+244,__zero_reg__
+ 309 045a 1092 0000 		sts animation+245,__zero_reg__
+ 310 045e 9093 0000 		sts animation+246,r25
+ 311 0462 1092 0000 		sts animation+247,__zero_reg__
+ 312 0466 90E2      		ldi r25,lo8(32)
+ 313 0468 9093 0000 		sts animation+248,r25
+ 314 046c 3093 0000 		sts animation+249,r19
+ 315 0470 8093 0000 		sts animation+250,r24
+ 316 0474 8093 0000 		sts animation+251,r24
+ 317 0478 8093 0000 		sts animation+252,r24
+ 318 047c 8093 0000 		sts animation+253,r24
+ 319 0480 3093 0000 		sts animation+254,r19
+ 320 0484 9093 0000 		sts animation+255,r25
+ 321 0488 1092 0000 		sts animation+256,__zero_reg__
+ 322 048c 1092 0000 		sts animation+257,__zero_reg__
+ 323 0490 1092 0000 		sts animation+258,__zero_reg__
+ 324 0494 1092 0000 		sts animation+259,__zero_reg__
+ 325 0498 1092 0000 		sts animation+260,__zero_reg__
+ 326 049c 1092 0000 		sts animation+261,__zero_reg__
+ 327 04a0 1092 0000 		sts animation+262,__zero_reg__
+ 328 04a4 1092 0000 		sts animation+263,__zero_reg__
+ 329               	/* epilogue start */
+ 330 04a8 0895      		ret
+DEFINED SYMBOLS
+                            *ABS*:00000000 animation.c
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cc97zGJf.s:2      *ABS*:0000003f __SREG__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cc97zGJf.s:3      *ABS*:0000003e __SP_H__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cc97zGJf.s:4      *ABS*:0000003d __SP_L__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cc97zGJf.s:5      *ABS*:00000034 __CCP__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cc97zGJf.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cc97zGJf.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//cc97zGJf.s:13     .text.SetupAnimation:00000000 SetupAnimation
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+face_animation
+animation

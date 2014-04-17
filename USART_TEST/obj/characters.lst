@@ -1,0 +1,313 @@
+   1               		.file	"characters.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.section	.text.SetupMarqueeLEDarray,"ax",@progbits
+  11               	.global	SetupMarqueeLEDarray
+  13               	SetupMarqueeLEDarray:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16               	/* stack size = 0 */
+  17               	.L__stack_usage = 0
+  18 0000 E0E0      		ldi r30,lo8(LEDarray)
+  19 0002 F0E0      		ldi r31,hi8(LEDarray)
+  20 0004 1092 0000 		sts LEDarray,__zero_reg__
+  21 0008 8FEF      		ldi r24,lo8(-1)
+  22 000a 8093 0000 		sts LEDarray+1,r24
+  23 000e 98E1      		ldi r25,lo8(24)
+  24 0010 9093 0000 		sts LEDarray+2,r25
+  25 0014 9093 0000 		sts LEDarray+3,r25
+  26 0018 9093 0000 		sts LEDarray+4,r25
+  27 001c 8093 0000 		sts LEDarray+5,r24
+  28 0020 1092 0000 		sts LEDarray+6,__zero_reg__
+  29 0024 1092 0000 		sts LEDarray+7,__zero_reg__
+  30 0028 1092 0000 		sts LEDarray+8,__zero_reg__
+  31 002c 1092 0000 		sts LEDarray+9,__zero_reg__
+  32 0030 1092 0000 		sts LEDarray+10,__zero_reg__
+  33 0034 1092 0000 		sts LEDarray+11,__zero_reg__
+  34 0038 1092 0000 		sts LEDarray+12,__zero_reg__
+  35 003c 1092 0000 		sts LEDarray+13,__zero_reg__
+  36 0040 1092 0000 		sts LEDarray+14,__zero_reg__
+  37 0044 1092 0000 		sts LEDarray+15,__zero_reg__
+  38 0048 1092 0000 		sts LEDarray+16,__zero_reg__
+  39 004c 1092 0000 		sts LEDarray+17,__zero_reg__
+  40 0050 1092 0000 		sts LEDarray+18,__zero_reg__
+  41 0054 8093 0000 		sts LEDarray+19,r24
+  42 0058 8093 0000 		sts LEDarray+20,r24
+  43 005c 90EC      		ldi r25,lo8(-64)
+  44 005e 9093 0000 		sts LEDarray+21,r25
+  45 0062 9093 0000 		sts LEDarray+22,r25
+  46 0066 9093 0000 		sts LEDarray+23,r25
+  47 006a 1092 0000 		sts LEDarray+24,__zero_reg__
+  48 006e 8093 0000 		sts LEDarray+25,r24
+  49 0072 21E8      		ldi r18,lo8(-127)
+  50 0074 2093 0000 		sts LEDarray+26,r18
+  51 0078 2093 0000 		sts LEDarray+27,r18
+  52 007c 2093 0000 		sts LEDarray+28,r18
+  53 0080 8093 0000 		sts LEDarray+29,r24
+  54 0084 1092 0000 		sts LEDarray+30,__zero_reg__
+  55 0088 1092 0000 		sts LEDarray+31,__zero_reg__
+  56 008c 1092 0000 		sts LEDarray+32,__zero_reg__
+  57 0090 1092 0000 		sts LEDarray+33,__zero_reg__
+  58 0094 1092 0000 		sts LEDarray+34,__zero_reg__
+  59 0098 1092 0000 		sts LEDarray+35,__zero_reg__
+  60 009c 1092 0000 		sts LEDarray+36,__zero_reg__
+  61 00a0 1092 0000 		sts LEDarray+37,__zero_reg__
+  62 00a4 8093 0000 		sts LEDarray+38,r24
+  63 00a8 39E9      		ldi r19,lo8(-103)
+  64 00aa 3093 0000 		sts LEDarray+39,r19
+  65 00ae 3093 0000 		sts LEDarray+40,r19
+  66 00b2 3093 0000 		sts LEDarray+41,r19
+  67 00b6 3093 0000 		sts LEDarray+42,r19
+  68 00ba 1092 0000 		sts LEDarray+43,__zero_reg__
+  69 00be 1092 0000 		sts LEDarray+44,__zero_reg__
+  70 00c2 1092 0000 		sts LEDarray+45,__zero_reg__
+  71 00c6 1092 0000 		sts LEDarray+46,__zero_reg__
+  72 00ca 1092 0000 		sts LEDarray+47,__zero_reg__
+  73 00ce 1092 0000 		sts LEDarray+48,__zero_reg__
+  74 00d2 1092 0000 		sts LEDarray+49,__zero_reg__
+  75 00d6 8093 0000 		sts LEDarray+50,r24
+  76 00da 8093 0000 		sts LEDarray+51,r24
+  77 00de 9093 0000 		sts LEDarray+52,r25
+  78 00e2 9093 0000 		sts LEDarray+53,r25
+  79 00e6 9093 0000 		sts LEDarray+54,r25
+  80 00ea 1092 0000 		sts LEDarray+55,__zero_reg__
+  81 00ee 1092 0000 		sts LEDarray+56,__zero_reg__
+  82 00f2 1092 0000 		sts LEDarray+57,__zero_reg__
+  83 00f6 1092 0000 		sts LEDarray+58,__zero_reg__
+  84 00fa 1092 0000 		sts LEDarray+59,__zero_reg__
+  85 00fe 1092 0000 		sts LEDarray+60,__zero_reg__
+  86 0102 15AE      		std Z+61,__zero_reg__
+  87 0104 16AE      		std Z+62,__zero_reg__
+  88 0106 17AE      		std Z+63,__zero_reg__
+  89 0108 1092 0000 		sts LEDarray+64,__zero_reg__
+  90 010c 1092 0000 		sts LEDarray+65,__zero_reg__
+  91 0110 1092 0000 		sts LEDarray+66,__zero_reg__
+  92 0114 1092 0000 		sts LEDarray+67,__zero_reg__
+  93 0118 1092 0000 		sts LEDarray+68,__zero_reg__
+  94 011c 1092 0000 		sts LEDarray+69,__zero_reg__
+  95 0120 1092 0000 		sts LEDarray+70,__zero_reg__
+  96 0124 1092 0000 		sts LEDarray+71,__zero_reg__
+  97 0128 1092 0000 		sts LEDarray+72,__zero_reg__
+  98 012c 1092 0000 		sts LEDarray+73,__zero_reg__
+  99 0130 1092 0000 		sts LEDarray+74,__zero_reg__
+ 100 0134 8093 0000 		sts LEDarray+75,r24
+ 101 0138 8093 0000 		sts LEDarray+76,r24
+ 102 013c 9093 0000 		sts LEDarray+77,r25
+ 103 0140 9093 0000 		sts LEDarray+78,r25
+ 104 0144 9093 0000 		sts LEDarray+79,r25
+ 105 0148 1092 0000 		sts LEDarray+80,__zero_reg__
+ 106 014c 1092 0000 		sts LEDarray+81,__zero_reg__
+ 107 0150 1092 0000 		sts LEDarray+82,__zero_reg__
+ 108 0154 1092 0000 		sts LEDarray+83,__zero_reg__
+ 109 0158 1092 0000 		sts LEDarray+84,__zero_reg__
+ 110 015c 1092 0000 		sts LEDarray+85,__zero_reg__
+ 111 0160 1092 0000 		sts LEDarray+86,__zero_reg__
+ 112 0164 8093 0000 		sts LEDarray+87,r24
+ 113 0168 2093 0000 		sts LEDarray+88,r18
+ 114 016c 2093 0000 		sts LEDarray+89,r18
+ 115 0170 2093 0000 		sts LEDarray+90,r18
+ 116 0174 8093 0000 		sts LEDarray+91,r24
+ 117 0178 1092 0000 		sts LEDarray+92,__zero_reg__
+ 118               	/* epilogue start */
+ 119 017c 0895      		ret
+ 121               		.section	.text.SetupCharacterArray,"ax",@progbits
+ 122               	.global	SetupCharacterArray
+ 124               	SetupCharacterArray:
+ 125 0000 CF93      		push r28
+ 126               	/* prologue: function */
+ 127               	/* frame size = 0 */
+ 128               	/* stack size = 1 */
+ 129               	.L__stack_usage = 1
+ 130 0002 E0E0      		ldi r30,lo8(CharacterArray)
+ 131 0004 F0E0      		ldi r31,hi8(CharacterArray)
+ 132 0006 8CEF      		ldi r24,lo8(-4)
+ 133 0008 8093 0000 		sts CharacterArray,r24
+ 134 000c 92E1      		ldi r25,lo8(18)
+ 135 000e 9093 0000 		sts CharacterArray+1,r25
+ 136 0012 51E1      		ldi r21,lo8(17)
+ 137 0014 5093 0000 		sts CharacterArray+2,r21
+ 138 0018 9093 0000 		sts CharacterArray+3,r25
+ 139 001c 8093 0000 		sts CharacterArray+4,r24
+ 140 0020 8FEF      		ldi r24,lo8(-1)
+ 141 0022 8093 0000 		sts CharacterArray+5,r24
+ 142 0026 21E9      		ldi r18,lo8(-111)
+ 143 0028 2093 0000 		sts CharacterArray+6,r18
+ 144 002c 2093 0000 		sts CharacterArray+7,r18
+ 145 0030 2093 0000 		sts CharacterArray+8,r18
+ 146 0034 96E6      		ldi r25,lo8(102)
+ 147 0036 9093 0000 		sts CharacterArray+9,r25
+ 148 003a 6EE7      		ldi r22,lo8(126)
+ 149 003c 6093 0000 		sts CharacterArray+10,r22
+ 150 0040 91E8      		ldi r25,lo8(-127)
+ 151 0042 9093 0000 		sts CharacterArray+11,r25
+ 152 0046 9093 0000 		sts CharacterArray+12,r25
+ 153 004a 9093 0000 		sts CharacterArray+13,r25
+ 154 004e B2E4      		ldi r27,lo8(66)
+ 155 0050 B093 0000 		sts CharacterArray+14,r27
+ 156 0054 8093 0000 		sts CharacterArray+15,r24
+ 157 0058 9093 0000 		sts CharacterArray+16,r25
+ 158 005c 9093 0000 		sts CharacterArray+17,r25
+ 159 0060 B093 0000 		sts CharacterArray+18,r27
+ 160 0064 3CE3      		ldi r19,lo8(60)
+ 161 0066 3093 0000 		sts CharacterArray+19,r19
+ 162 006a 8093 0000 		sts CharacterArray+20,r24
+ 163 006e 8093 0000 		sts CharacterArray+21,r24
+ 164 0072 39E9      		ldi r19,lo8(-103)
+ 165 0074 3093 0000 		sts CharacterArray+22,r19
+ 166 0078 3093 0000 		sts CharacterArray+23,r19
+ 167 007c 3093 0000 		sts CharacterArray+24,r19
+ 168 0080 8093 0000 		sts CharacterArray+25,r24
+ 169 0084 8093 0000 		sts CharacterArray+26,r24
+ 170 0088 39E0      		ldi r19,lo8(9)
+ 171 008a 3093 0000 		sts CharacterArray+27,r19
+ 172 008e 3093 0000 		sts CharacterArray+28,r19
+ 173 0092 3093 0000 		sts CharacterArray+29,r19
+ 174 0096 6093 0000 		sts CharacterArray+30,r22
+ 175 009a 9093 0000 		sts CharacterArray+31,r25
+ 176 009e 2093 0000 		sts CharacterArray+32,r18
+ 177 00a2 2093 0000 		sts CharacterArray+33,r18
+ 178 00a6 22EF      		ldi r18,lo8(-14)
+ 179 00a8 2093 0000 		sts CharacterArray+34,r18
+ 180 00ac 8093 0000 		sts CharacterArray+35,r24
+ 181 00b0 78E1      		ldi r23,lo8(24)
+ 182 00b2 7093 0000 		sts CharacterArray+36,r23
+ 183 00b6 7093 0000 		sts CharacterArray+37,r23
+ 184 00ba 7093 0000 		sts CharacterArray+38,r23
+ 185 00be 8093 0000 		sts CharacterArray+39,r24
+ 186 00c2 9093 0000 		sts CharacterArray+40,r25
+ 187 00c6 9093 0000 		sts CharacterArray+41,r25
+ 188 00ca 8093 0000 		sts CharacterArray+42,r24
+ 189 00ce 9093 0000 		sts CharacterArray+43,r25
+ 190 00d2 9093 0000 		sts CharacterArray+44,r25
+ 191 00d6 A0E4      		ldi r26,lo8(64)
+ 192 00d8 A093 0000 		sts CharacterArray+45,r26
+ 193 00dc 20E8      		ldi r18,lo8(-128)
+ 194 00de 2093 0000 		sts CharacterArray+46,r18
+ 195 00e2 9093 0000 		sts CharacterArray+47,r25
+ 196 00e6 3FE7      		ldi r19,lo8(127)
+ 197 00e8 3093 0000 		sts CharacterArray+48,r19
+ 198 00ec 41E0      		ldi r20,lo8(1)
+ 199 00ee 4093 0000 		sts CharacterArray+49,r20
+ 200 00f2 8093 0000 		sts CharacterArray+50,r24
+ 201 00f6 7093 0000 		sts CharacterArray+51,r23
+ 202 00fa C4E2      		ldi r28,lo8(36)
+ 203 00fc C093 0000 		sts CharacterArray+52,r28
+ 204 0100 B093 0000 		sts CharacterArray+53,r27
+ 205 0104 9093 0000 		sts CharacterArray+54,r25
+ 206 0108 8093 0000 		sts CharacterArray+55,r24
+ 207 010c 8093 0000 		sts CharacterArray+56,r24
+ 208 0110 2093 0000 		sts CharacterArray+57,r18
+ 209 0114 2093 0000 		sts CharacterArray+58,r18
+ 210 0118 2093 0000 		sts CharacterArray+59,r18
+ 211 011c 8093 0000 		sts CharacterArray+60,r24
+ 212 0120 B2E0      		ldi r27,lo8(2)
+ 213 0122 B5AF      		std Z+61,r27
+ 214 0124 CCE1      		ldi r28,lo8(28)
+ 215 0126 C6AF      		std Z+62,r28
+ 216 0128 B7AF      		std Z+63,r27
+ 217 012a 8093 0000 		sts CharacterArray+64,r24
+ 218 012e 8093 0000 		sts CharacterArray+65,r24
+ 219 0132 E6E0      		ldi r30,lo8(6)
+ 220 0134 E093 0000 		sts CharacterArray+66,r30
+ 221 0138 7093 0000 		sts CharacterArray+67,r23
+ 222 013c 70E6      		ldi r23,lo8(96)
+ 223 013e 7093 0000 		sts CharacterArray+68,r23
+ 224 0142 8093 0000 		sts CharacterArray+69,r24
+ 225 0146 6093 0000 		sts CharacterArray+70,r22
+ 226 014a 9093 0000 		sts CharacterArray+71,r25
+ 227 014e 9093 0000 		sts CharacterArray+72,r25
+ 228 0152 9093 0000 		sts CharacterArray+73,r25
+ 229 0156 6093 0000 		sts CharacterArray+74,r22
+ 230 015a 8093 0000 		sts CharacterArray+75,r24
+ 231 015e 5093 0000 		sts CharacterArray+76,r21
+ 232 0162 5093 0000 		sts CharacterArray+77,r21
+ 233 0166 5093 0000 		sts CharacterArray+78,r21
+ 234 016a 7EE0      		ldi r23,lo8(14)
+ 235 016c 7093 0000 		sts CharacterArray+79,r23
+ 236 0170 6093 0000 		sts CharacterArray+80,r22
+ 237 0174 9093 0000 		sts CharacterArray+81,r25
+ 238 0178 9093 0000 		sts CharacterArray+82,r25
+ 239 017c 91E4      		ldi r25,lo8(65)
+ 240 017e 9093 0000 		sts CharacterArray+83,r25
+ 241 0182 9EEB      		ldi r25,lo8(-66)
+ 242 0184 9093 0000 		sts CharacterArray+84,r25
+ 243 0188 8093 0000 		sts CharacterArray+85,r24
+ 244 018c 5093 0000 		sts CharacterArray+86,r21
+ 245 0190 91E3      		ldi r25,lo8(49)
+ 246 0192 9093 0000 		sts CharacterArray+87,r25
+ 247 0196 91E5      		ldi r25,lo8(81)
+ 248 0198 9093 0000 		sts CharacterArray+88,r25
+ 249 019c 9CE8      		ldi r25,lo8(-116)
+ 250 019e 9093 0000 		sts CharacterArray+89,r25
+ 251 01a2 9CE4      		ldi r25,lo8(76)
+ 252 01a4 9093 0000 		sts CharacterArray+90,r25
+ 253 01a8 92E9      		ldi r25,lo8(-110)
+ 254 01aa 9093 0000 		sts CharacterArray+91,r25
+ 255 01ae 9093 0000 		sts CharacterArray+92,r25
+ 256 01b2 9093 0000 		sts CharacterArray+93,r25
+ 257 01b6 54E6      		ldi r21,lo8(100)
+ 258 01b8 5093 0000 		sts CharacterArray+94,r21
+ 259 01bc 4093 0000 		sts CharacterArray+95,r20
+ 260 01c0 4093 0000 		sts CharacterArray+96,r20
+ 261 01c4 8093 0000 		sts CharacterArray+97,r24
+ 262 01c8 4093 0000 		sts CharacterArray+98,r20
+ 263 01cc 4093 0000 		sts CharacterArray+99,r20
+ 264 01d0 3093 0000 		sts CharacterArray+100,r19
+ 265 01d4 2093 0000 		sts CharacterArray+101,r18
+ 266 01d8 2093 0000 		sts CharacterArray+102,r18
+ 267 01dc 2093 0000 		sts CharacterArray+103,r18
+ 268 01e0 3093 0000 		sts CharacterArray+104,r19
+ 269 01e4 8FE3      		ldi r24,lo8(63)
+ 270 01e6 8093 0000 		sts CharacterArray+105,r24
+ 271 01ea A093 0000 		sts CharacterArray+106,r26
+ 272 01ee 2093 0000 		sts CharacterArray+107,r18
+ 273 01f2 A093 0000 		sts CharacterArray+108,r26
+ 274 01f6 8093 0000 		sts CharacterArray+109,r24
+ 275 01fa 3093 0000 		sts CharacterArray+110,r19
+ 276 01fe 2093 0000 		sts CharacterArray+111,r18
+ 277 0202 80E7      		ldi r24,lo8(112)
+ 278 0204 8093 0000 		sts CharacterArray+112,r24
+ 279 0208 2093 0000 		sts CharacterArray+113,r18
+ 280 020c 3093 0000 		sts CharacterArray+114,r19
+ 281 0210 87EC      		ldi r24,lo8(-57)
+ 282 0212 8093 0000 		sts CharacterArray+115,r24
+ 283 0216 28E2      		ldi r18,lo8(40)
+ 284 0218 2093 0000 		sts CharacterArray+116,r18
+ 285 021c 30E1      		ldi r19,lo8(16)
+ 286 021e 3093 0000 		sts CharacterArray+117,r19
+ 287 0222 2093 0000 		sts CharacterArray+118,r18
+ 288 0226 8093 0000 		sts CharacterArray+119,r24
+ 289 022a 82EC      		ldi r24,lo8(-62)
+ 290 022c 8093 0000 		sts CharacterArray+120,r24
+ 291 0230 82EA      		ldi r24,lo8(-94)
+ 292 0232 8093 0000 		sts CharacterArray+121,r24
+ 293 0236 9093 0000 		sts CharacterArray+122,r25
+ 294 023a 8AE8      		ldi r24,lo8(-118)
+ 295 023c 8093 0000 		sts CharacterArray+123,r24
+ 296 0240 86E8      		ldi r24,lo8(-122)
+ 297 0242 8093 0000 		sts CharacterArray+124,r24
+ 298               	/* epilogue start */
+ 299 0246 CF91      		pop r28
+ 300 0248 0895      		ret
+DEFINED SYMBOLS
+                            *ABS*:00000000 characters.c
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccO3lqfR.s:2      *ABS*:0000003f __SREG__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccO3lqfR.s:3      *ABS*:0000003e __SP_H__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccO3lqfR.s:4      *ABS*:0000003d __SP_L__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccO3lqfR.s:5      *ABS*:00000034 __CCP__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccO3lqfR.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccO3lqfR.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccO3lqfR.s:13     .text.SetupMarqueeLEDarray:00000000 SetupMarqueeLEDarray
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccO3lqfR.s:124    .text.SetupCharacterArray:00000000 SetupCharacterArray
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+LEDarray
+CharacterArray

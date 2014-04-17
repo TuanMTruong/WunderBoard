@@ -1,0 +1,116 @@
+   1               		.file	"wunder_usart_polling.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.section	.text.ClearRingBuffer,"ax",@progbits
+  11               	.global	ClearRingBuffer
+  13               	ClearRingBuffer:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16               	/* stack size = 0 */
+  17               	.L__stack_usage = 0
+  18 0000 80E0      		ldi r24,lo8(0)
+  19 0002 90E0      		ldi r25,hi8(0)
+  20               	.L2:
+  21 0004 FC01      		movw r30,r24
+  22 0006 E050      		subi r30,lo8(-(ringbuffer))
+  23 0008 F040      		sbci r31,hi8(-(ringbuffer))
+  24 000a 1082      		st Z,__zero_reg__
+  25 000c 0196      		adiw r24,1
+  26 000e 8436      		cpi r24,100
+  27 0010 9105      		cpc r25,__zero_reg__
+  28 0012 01F4      		brne .L2
+  29               	/* epilogue start */
+  30 0014 0895      		ret
+  32               		.section	.text.startup.main,"ax",@progbits
+  33               	.global	main
+  35               	main:
+  36               	/* prologue: function */
+  37               	/* frame size = 0 */
+  38               	/* stack size = 0 */
+  39               	.L__stack_usage = 0
+  40 0000 0E94 0000 		call Initialize
+  41 0004 0E94 0000 		call SetupSPI
+  42 0008 0E94 0000 		call SetupUSART
+  43 000c C1E0      		ldi r28,lo8(1)
+  44 000e D0E0      		ldi r29,hi8(1)
+  45               	.L12:
+  46 0010 8091 C800 		lds r24,200
+  47 0014 87FF      		sbrs r24,7
+  48 0016 00C0      		rjmp .L5
+  49 0018 88B1      		in r24,40-32
+  50 001a 8095      		com r24
+  51 001c 88B9      		out 40-32,r24
+  52 001e 8091 0000 		lds r24,ringcounter
+  53 0022 9091 0000 		lds r25,ringcounter+1
+  54 0026 8436      		cpi r24,100
+  55 0028 9105      		cpc r25,__zero_reg__
+  56 002a 01F4      		brne .L6
+  57 002c 1092 0000 		sts ringcounter+1,__zero_reg__
+  58 0030 1092 0000 		sts ringcounter,__zero_reg__
+  59               	.L6:
+  60 0034 E091 0000 		lds r30,ringcounter
+  61 0038 F091 0000 		lds r31,ringcounter+1
+  62 003c 8091 CE00 		lds r24,206
+  63 0040 E050      		subi r30,lo8(-(ringbuffer))
+  64 0042 F040      		sbci r31,hi8(-(ringbuffer))
+  65 0044 8083      		st Z,r24
+  66 0046 E091 0000 		lds r30,ringcounter
+  67 004a F091 0000 		lds r31,ringcounter+1
+  68 004e E050      		subi r30,lo8(-(ringbuffer))
+  69 0050 F040      		sbci r31,hi8(-(ringbuffer))
+  70 0052 8081      		ld r24,Z
+  71 0054 8A30      		cpi r24,lo8(10)
+  72 0056 01F4      		brne .L7
+  73 0058 D093 0000 		sts rev_complete+1,r29
+  74 005c C093 0000 		sts rev_complete,r28
+  75               	.L7:
+  76 0060 8091 0000 		lds r24,ringcounter
+  77 0064 9091 0000 		lds r25,ringcounter+1
+  78 0068 0196      		adiw r24,1
+  79 006a 9093 0000 		sts ringcounter+1,r25
+  80 006e 8093 0000 		sts ringcounter,r24
+  81               	.L5:
+  82 0072 8091 0000 		lds r24,rev_complete
+  83 0076 9091 0000 		lds r25,rev_complete+1
+  84 007a 8130      		cpi r24,1
+  85 007c 9105      		cpc r25,__zero_reg__
+  86 007e 01F4      		brne .L12
+  87 0080 1092 0000 		sts rev_complete+1,__zero_reg__
+  88 0084 1092 0000 		sts rev_complete,__zero_reg__
+  89 0088 1092 0000 		sts ringcounter+1,__zero_reg__
+  90 008c 1092 0000 		sts ringcounter,__zero_reg__
+  91 0090 80E0      		ldi r24,lo8(ringbuffer)
+  92 0092 90E0      		ldi r25,hi8(ringbuffer)
+  93 0094 0E94 0000 		call SendStringUSART
+  94 0098 0E94 0000 		call ClearRingBuffer
+  95 009c 00C0      		rjmp .L12
+  97               		.comm rev_complete,2,1
+  98               		.comm ringcounter,2,1
+  99               		.comm ringbuffer,100,1
+DEFINED SYMBOLS
+                            *ABS*:00000000 wunder_usart_polling.c
+/var/tmp//cceGiXza.s:2      *ABS*:0000003f __SREG__
+/var/tmp//cceGiXza.s:3      *ABS*:0000003e __SP_H__
+/var/tmp//cceGiXza.s:4      *ABS*:0000003d __SP_L__
+/var/tmp//cceGiXza.s:5      *ABS*:00000034 __CCP__
+/var/tmp//cceGiXza.s:6      *ABS*:00000000 __tmp_reg__
+/var/tmp//cceGiXza.s:7      *ABS*:00000001 __zero_reg__
+/var/tmp//cceGiXza.s:13     .text.ClearRingBuffer:00000000 ClearRingBuffer
+                            *COM*:00000064 ringbuffer
+/var/tmp//cceGiXza.s:35     .text.startup.main:00000000 main
+                            *COM*:00000002 ringcounter
+                            *COM*:00000002 rev_complete
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+Initialize
+SetupSPI
+SetupUSART
+SendStringUSART

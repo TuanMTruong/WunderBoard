@@ -1,0 +1,271 @@
+   1               		.file	"wunderproject.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.section	.text.Initialize,"ax",@progbits
+  11               	.global	Initialize
+  13               	Initialize:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16               	/* stack size = 0 */
+  17               	.L__stack_usage = 0
+  18 0000 11B8      		out 33-32,__zero_reg__
+  19 0002 8EE8      		ldi r24,lo8(-114)
+  20 0004 84B9      		out 36-32,r24
+  21 0006 8FEF      		ldi r24,lo8(-1)
+  22 0008 87B9      		out 39-32,r24
+  23 000a 88E0      		ldi r24,lo8(8)
+  24 000c 8AB9      		out 42-32,r24
+  25 000e 87E0      		ldi r24,lo8(7)
+  26 0010 8DB9      		out 45-32,r24
+  27 0012 10BA      		out 48-32,__zero_reg__
+  28               	/* epilogue start */
+  29 0014 0895      		ret
+  31               		.section	.text.SetupSPI,"ax",@progbits
+  32               	.global	SetupSPI
+  34               	SetupSPI:
+  35               	/* prologue: function */
+  36               	/* frame size = 0 */
+  37               	/* stack size = 0 */
+  38               	.L__stack_usage = 0
+  39 0000 80E7      		ldi r24,lo8(112)
+  40 0002 8CBD      		out 76-32,r24
+  41               	/* epilogue start */
+  42 0004 0895      		ret
+  44               		.section	.text.SendByteSPI,"ax",@progbits
+  45               	.global	SendByteSPI
+  47               	SendByteSPI:
+  48               	/* prologue: function */
+  49               	/* frame size = 0 */
+  50               	/* stack size = 0 */
+  51               	.L__stack_usage = 0
+  52 0000 8EBD      		out 78-32,r24
+  53               	.L4:
+  54 0002 0DB4      		in __tmp_reg__,77-32
+  55 0004 07FE      		sbrs __tmp_reg__,7
+  56 0006 00C0      		rjmp .L4
+  57               	/* epilogue start */
+  58 0008 0895      		ret
+  60               		.section	.text.flipLatch,"ax",@progbits
+  61               	.global	flipLatch
+  63               	flipLatch:
+  64               	/* prologue: function */
+  65               	/* frame size = 0 */
+  66               	/* stack size = 0 */
+  67               	.L__stack_usage = 0
+  68 0000 2F9A      		sbi 37-32,7
+  69 0002 83E0      		 ldi r24,lo8(3)
+  70 0004 8A95      	    1:dec r24
+  71 0006 01F4      	    brne 1b
+  72 0008 0000      		nop
+  73 000a 2F98      		cbi 37-32,7
+  74 000c 83E0      		 ldi r24,lo8(3)
+  75 000e 8A95      	    1:dec r24
+  76 0010 01F4      	    brne 1b
+  77 0012 0000      		nop
+  78               	/* epilogue start */
+  79 0014 0895      		ret
+  81               		.section	.text.SendRGBSPI,"ax",@progbits
+  82               	.global	SendRGBSPI
+  84               	SendRGBSPI:
+  85 0000 CF93      		push r28
+  86 0002 DF93      		push r29
+  87 0004 00D0      		rcall .
+  88 0006 CDB7      		in r28,__SP_L__
+  89 0008 DEB7      		in r29,__SP_H__
+  90               	/* prologue: function */
+  91               	/* frame size = 2 */
+  92               	/* stack size = 4 */
+  93               	.L__stack_usage = 4
+  94 000a 4A83      		std Y+2,r20
+  95 000c 6983      		std Y+1,r22
+  96 000e 0E94 0000 		call SendByteSPI
+  97 0012 6981      		ldd r22,Y+1
+  98 0014 862F      		mov r24,r22
+  99 0016 0E94 0000 		call SendByteSPI
+ 100 001a 4A81      		ldd r20,Y+2
+ 101 001c 842F      		mov r24,r20
+ 102 001e 0E94 0000 		call SendByteSPI
+ 103 0022 0E94 0000 		call flipLatch
+ 104               	/* epilogue start */
+ 105 0026 0F90      		pop __tmp_reg__
+ 106 0028 0F90      		pop __tmp_reg__
+ 107 002a DF91      		pop r29
+ 108 002c CF91      		pop r28
+ 109 002e 0895      		ret
+ 111               		.section	.text.read_adc,"ax",@progbits
+ 112               	.global	read_adc
+ 114               	read_adc:
+ 115               	/* prologue: function */
+ 116               	/* frame size = 0 */
+ 117               	/* stack size = 0 */
+ 118               	.L__stack_usage = 0
+ 119 0000 8066      		ori r24,lo8(96)
+ 120 0002 8093 7C00 		sts 124,r24
+ 121 0006 86EC      		ldi r24,lo8(-58)
+ 122 0008 8093 7A00 		sts 122,r24
+ 123               	.L9:
+ 124 000c 8091 7A00 		lds r24,122
+ 125 0010 84FF      		sbrs r24,4
+ 126 0012 00C0      		rjmp .L9
+ 127 0014 8091 7A00 		lds r24,122
+ 128 0018 8061      		ori r24,lo8(16)
+ 129 001a 8093 7A00 		sts 122,r24
+ 130 001e 8091 7A00 		lds r24,122
+ 131 0022 8064      		ori r24,lo8(64)
+ 132 0024 8093 7A00 		sts 122,r24
+ 133               	.L10:
+ 134 0028 8091 7A00 		lds r24,122
+ 135 002c 84FF      		sbrs r24,4
+ 136 002e 00C0      		rjmp .L10
+ 137 0030 8091 7A00 		lds r24,122
+ 138 0034 8061      		ori r24,lo8(16)
+ 139 0036 8093 7A00 		sts 122,r24
+ 140 003a 8091 7900 		lds r24,121
+ 141 003e 1092 7A00 		sts 122,__zero_reg__
+ 142               	/* epilogue start */
+ 143 0042 0895      		ret
+ 145               		.section	.text.SetupUSART,"ax",@progbits
+ 146               	.global	SetupUSART
+ 148               	SetupUSART:
+ 149               	/* prologue: function */
+ 150               	/* frame size = 0 */
+ 151               	/* stack size = 0 */
+ 152               	.L__stack_usage = 0
+ 153 0000 82E0      		ldi r24,lo8(2)
+ 154 0002 8093 C800 		sts 200,r24
+ 155 0006 88E1      		ldi r24,lo8(24)
+ 156 0008 8093 C900 		sts 201,r24
+ 157 000c 86E0      		ldi r24,lo8(6)
+ 158 000e 8093 CA00 		sts 202,r24
+ 159 0012 8CE0      		ldi r24,lo8(12)
+ 160 0014 90E0      		ldi r25,hi8(12)
+ 161 0016 9093 CD00 		sts 204+1,r25
+ 162 001a 8093 CC00 		sts 204,r24
+ 163               	/* epilogue start */
+ 164 001e 0895      		ret
+ 166               		.section	.text.ReadByteUSART,"ax",@progbits
+ 167               	.global	ReadByteUSART
+ 169               	ReadByteUSART:
+ 170               	/* prologue: function */
+ 171               	/* frame size = 0 */
+ 172               	/* stack size = 0 */
+ 173               	.L__stack_usage = 0
+ 174               	.L15:
+ 175 0000 8091 C800 		lds r24,200
+ 176 0004 87FF      		sbrs r24,7
+ 177 0006 00C0      		rjmp .L15
+ 178 0008 8091 CE00 		lds r24,206
+ 179               	/* epilogue start */
+ 180 000c 0895      		ret
+ 182               		.section	.text.ReadStringUSART,"ax",@progbits
+ 183               	.global	ReadStringUSART
+ 185               	ReadStringUSART:
+ 186 0000 CF93      		push r28
+ 187 0002 DF93      		push r29
+ 188               	/* prologue: function */
+ 189               	/* frame size = 0 */
+ 190               	/* stack size = 2 */
+ 191               	.L__stack_usage = 2
+ 192 0004 EC01      		movw r28,r24
+ 193 0006 00C0      		rjmp .L18
+ 194               	.L20:
+ 195 0008 0E94 0000 		call ReadByteUSART
+ 196 000c 8993      		st Y+,r24
+ 197 000e 8A30      		cpi r24,lo8(10)
+ 198 0010 01F0      		breq .L17
+ 199               	.L18:
+ 200 0012 8881      		ld r24,Y
+ 201 0014 8823      		tst r24
+ 202 0016 01F4      		brne .L20
+ 203               	.L17:
+ 204               	/* epilogue start */
+ 205 0018 DF91      		pop r29
+ 206 001a CF91      		pop r28
+ 207 001c 0895      		ret
+ 209               		.section	.text.SendByteUSART,"ax",@progbits
+ 210               	.global	SendByteUSART
+ 212               	SendByteUSART:
+ 213               	/* prologue: function */
+ 214               	/* frame size = 0 */
+ 215               	/* stack size = 0 */
+ 216               	.L__stack_usage = 0
+ 217               	.L22:
+ 218 0000 9091 C800 		lds r25,200
+ 219 0004 95FF      		sbrs r25,5
+ 220 0006 00C0      		rjmp .L22
+ 221 0008 8093 CE00 		sts 206,r24
+ 222               	/* epilogue start */
+ 223 000c 0895      		ret
+ 225               		.section	.text.SendStringUSART,"ax",@progbits
+ 226               	.global	SendStringUSART
+ 228               	SendStringUSART:
+ 229 0000 CF93      		push r28
+ 230 0002 DF93      		push r29
+ 231               	/* prologue: function */
+ 232               	/* frame size = 0 */
+ 233               	/* stack size = 2 */
+ 234               	.L__stack_usage = 2
+ 235 0004 EC01      		movw r28,r24
+ 236 0006 00C0      		rjmp .L25
+ 237               	.L26:
+ 238 0008 0E94 0000 		call SendByteUSART
+ 239               	.L25:
+ 240 000c 8991      		ld r24,Y+
+ 241 000e 8823      		tst r24
+ 242 0010 01F4      		brne .L26
+ 243               	/* epilogue start */
+ 244 0012 DF91      		pop r29
+ 245 0014 CF91      		pop r28
+ 246 0016 0895      		ret
+ 248               		.section	.text.SetupUSART_RECV_INTR,"ax",@progbits
+ 249               	.global	SetupUSART_RECV_INTR
+ 251               	SetupUSART_RECV_INTR:
+ 252               	/* prologue: function */
+ 253               	/* frame size = 0 */
+ 254               	/* stack size = 0 */
+ 255               	.L__stack_usage = 0
+ 256 0000 E9EC      		ldi r30,lo8(201)
+ 257 0002 F0E0      		ldi r31,hi8(201)
+ 258 0004 8081      		ld r24,Z
+ 259 0006 8068      		ori r24,lo8(-128)
+ 260 0008 8083      		st Z,r24
+ 261               	/* epilogue start */
+ 262 000a 0895      		ret
+ 264               		.comm CharacterArray,130,1
+ 265               		.comm face_animation,24,1
+ 266               		.comm animation,264,1
+ 267               		.comm LEDarray,93,1
+DEFINED SYMBOLS
+                            *ABS*:00000000 wunderproject.c
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:2      *ABS*:0000003f __SREG__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:3      *ABS*:0000003e __SP_H__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:4      *ABS*:0000003d __SP_L__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:5      *ABS*:00000034 __CCP__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:13     .text.Initialize:00000000 Initialize
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:34     .text.SetupSPI:00000000 SetupSPI
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:47     .text.SendByteSPI:00000000 SendByteSPI
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:63     .text.flipLatch:00000000 flipLatch
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:84     .text.SendRGBSPI:00000000 SendRGBSPI
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:114    .text.read_adc:00000000 read_adc
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:148    .text.SetupUSART:00000000 SetupUSART
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:169    .text.ReadByteUSART:00000000 ReadByteUSART
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:185    .text.ReadStringUSART:00000000 ReadStringUSART
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:212    .text.SendByteUSART:00000000 SendByteUSART
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:228    .text.SendStringUSART:00000000 SendStringUSART
+/var/folders/5w/yy1wvsvs3qlc3rl7_n518bq80000gr/T//ccsoVIto.s:251    .text.SetupUSART_RECV_INTR:00000000 SetupUSART_RECV_INTR
+                            *COM*:00000082 CharacterArray
+                            *COM*:00000018 face_animation
+                            *COM*:00000108 animation
+                            *COM*:0000005d LEDarray
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
