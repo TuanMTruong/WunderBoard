@@ -205,19 +205,19 @@ void mtr_cmd(uint8_t cmd){
 		M2_ENABLE();
 		MOTOR_PORT |= ((1<<M1_DIR_PIN)|(1<<M2_DIR_PIN));
 	}
-	else if (cmd == RIGHT){
+	else if (cmd == LEFT){
 		M1_ENABLE();
 		M2_ENABLE();
 		MOTOR_PORT |= (1<<M2_DIR_PIN);
 		MOTOR_PORT &= ~(1<<M1_DIR_PIN);
 	}
-	else if (cmd == LEFT){
+	else if (cmd == RIGHT){
 		M1_ENABLE();
 		M2_ENABLE();
 		MOTOR_PORT |= (1<<M1_DIR_PIN);
 		MOTOR_PORT &= ~(1<<M2_DIR_PIN);
 	}
-	
+	return;	
 
 }
 /******************************************************************/
@@ -234,6 +234,10 @@ int main(void){
 	uint8_t states = FORWARD;
 	PORTD = 0xff;
 	PORTE = 0x00;
+	/**while(1){
+		M1_ENABLE();
+		M2_ENABLE();
+	}**/
 	while(1){
 		states = usart_readbyte();
 		//_delay_ms(1);
