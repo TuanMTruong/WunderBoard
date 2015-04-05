@@ -1,0 +1,143 @@
+   1               		.file	"display.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.section	.text.latch_display,"ax",@progbits
+   9               	.global	latch_display
+  11               	latch_display:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14               	/* stack size = 0 */
+  15               	.L__stack_usage = 0
+  16 0000 2F9A      		sbi 0x5,7
+  17 0002 89EF      		ldi r24,lo8(249)
+  18 0004 90E0      		ldi r25,hi8(249)
+  19 0006 0197      		1: sbiw r24,1
+  20 0008 01F4      		brne 1b
+  21 000a 00C0      		rjmp .
+  22 000c 0000      		nop
+  23 000e 2F98      		cbi 0x5,7
+  24 0010 0895      		ret
+  26               		.section	.text.init_display,"ax",@progbits
+  27               	.global	init_display
+  29               	init_display:
+  30 0000 CF93      		push r28
+  31 0002 DF93      		push r29
+  32               	/* prologue: function */
+  33               	/* frame size = 0 */
+  34               	/* stack size = 2 */
+  35               	.L__stack_usage = 2
+  36 0004 84E1      		ldi r24,lo8(20)
+  37 0006 0E94 0000 		call setup_SPI
+  38 000a 81E0      		ldi r24,lo8(1)
+  39 000c 85B9      		out 0x5,r24
+  40 000e C8E0      		ldi r28,lo8(8)
+  41 0010 D0E0      		ldi r29,0
+  42               	.L4:
+  43 0012 80E0      		ldi r24,0
+  44 0014 0E94 0000 		call send_SPI_byte
+  45 0018 80E0      		ldi r24,0
+  46 001a 0E94 0000 		call send_SPI_byte
+  47 001e 80E0      		ldi r24,0
+  48 0020 0E94 0000 		call send_SPI_byte
+  49 0024 0E94 0000 		call latch_display
+  50 0028 2197      		sbiw r28,1
+  51 002a 2097      		sbiw r28,0
+  52 002c 01F4      		brne .L4
+  53               	/* epilogue start */
+  54 002e DF91      		pop r29
+  55 0030 CF91      		pop r28
+  56 0032 0895      		ret
+  58               		.section	.text.line_display,"ax",@progbits
+  59               	.global	line_display
+  61               	line_display:
+  62 0000 CF93      		push r28
+  63 0002 DF93      		push r29
+  64 0004 00D0      		rcall .
+  65 0006 CDB7      		in r28,__SP_L__
+  66 0008 DEB7      		in r29,__SP_H__
+  67               	/* prologue: function */
+  68               	/* frame size = 2 */
+  69               	/* stack size = 4 */
+  70               	.L__stack_usage = 4
+  71 000a 2EB9      		out 0xe,r18
+  72 000c 4A83      		std Y+2,r20
+  73 000e 6983      		std Y+1,r22
+  74 0010 0E94 0000 		call send_SPI_byte
+  75 0014 6981      		ldd r22,Y+1
+  76 0016 862F      		mov r24,r22
+  77 0018 0E94 0000 		call send_SPI_byte
+  78 001c 4A81      		ldd r20,Y+2
+  79 001e 842F      		mov r24,r20
+  80 0020 0E94 0000 		call send_SPI_byte
+  81               	/* epilogue start */
+  82 0024 0F90      		pop __tmp_reg__
+  83 0026 0F90      		pop __tmp_reg__
+  84 0028 DF91      		pop r29
+  85 002a CF91      		pop r28
+  86 002c 0C94 0000 		jmp latch_display
+  88               		.section	.text.array_display,"ax",@progbits
+  89               	.global	array_display
+  91               	array_display:
+  92               	/* prologue: function */
+  93               	/* frame size = 0 */
+  94               	/* stack size = 0 */
+  95               	.L__stack_usage = 0
+  96 0000 0895      		ret
+  98               		.section	.text.fill_display,"ax",@progbits
+  99               	.global	fill_display
+ 101               	fill_display:
+ 102 0000 0F93      		push r16
+ 103 0002 1F93      		push r17
+ 104 0004 CF93      		push r28
+ 105 0006 DF93      		push r29
+ 106               	/* prologue: function */
+ 107               	/* frame size = 0 */
+ 108               	/* stack size = 4 */
+ 109               	.L__stack_usage = 4
+ 110 0008 D82F      		mov r29,r24
+ 111 000a 162F      		mov r17,r22
+ 112 000c 042F      		mov r16,r20
+ 113 000e C0E0      		ldi r28,0
+ 114               	.L10:
+ 115 0010 2C2F      		mov r18,r28
+ 116 0012 402F      		mov r20,r16
+ 117 0014 612F      		mov r22,r17
+ 118 0016 8D2F      		mov r24,r29
+ 119 0018 0E94 0000 		call line_display
+ 120 001c 89EF      		ldi r24,lo8(249)
+ 121 001e 90E0      		ldi r25,hi8(249)
+ 122 0020 0197      		1: sbiw r24,1
+ 123 0022 01F4      		brne 1b
+ 124 0024 00C0      		rjmp .
+ 125 0026 0000      		nop
+ 126 0028 CF5F      		subi r28,lo8(-(1))
+ 127 002a C830      		cpi r28,lo8(8)
+ 128 002c 01F4      		brne .L10
+ 129               	/* epilogue start */
+ 130 002e DF91      		pop r29
+ 131 0030 CF91      		pop r28
+ 132 0032 1F91      		pop r17
+ 133 0034 0F91      		pop r16
+ 134 0036 0895      		ret
+ 136               		.ident	"GCC: (GNU) 4.8.1"
+DEFINED SYMBOLS
+                            *ABS*:00000000 display.c
+/var/tmp//ccmEHqEN.s:2      *ABS*:0000003e __SP_H__
+/var/tmp//ccmEHqEN.s:3      *ABS*:0000003d __SP_L__
+/var/tmp//ccmEHqEN.s:4      *ABS*:0000003f __SREG__
+/var/tmp//ccmEHqEN.s:5      *ABS*:0000003b __RAMPZ__
+/var/tmp//ccmEHqEN.s:6      *ABS*:00000000 __tmp_reg__
+/var/tmp//ccmEHqEN.s:7      *ABS*:00000001 __zero_reg__
+/var/tmp//ccmEHqEN.s:11     .text.latch_display:00000000 latch_display
+/var/tmp//ccmEHqEN.s:29     .text.init_display:00000000 init_display
+/var/tmp//ccmEHqEN.s:61     .text.line_display:00000000 line_display
+/var/tmp//ccmEHqEN.s:91     .text.array_display:00000000 array_display
+/var/tmp//ccmEHqEN.s:101    .text.fill_display:00000000 fill_display
+
+UNDEFINED SYMBOLS
+setup_SPI
+send_SPI_byte

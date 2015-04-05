@@ -1,0 +1,49 @@
+   1               		.file	"spi.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.section	.text.setup_SPI,"ax",@progbits
+   9               	.global	setup_SPI
+  11               	setup_SPI:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14               	/* stack size = 0 */
+  15               	.L__stack_usage = 0
+  16 0000 94B1      		in r25,0x4
+  17 0002 9760      		ori r25,lo8(7)
+  18 0004 94B9      		out 0x4,r25
+  19 0006 2398      		cbi 0x4,3
+  20 0008 8064      		ori r24,lo8(64)
+  21 000a 8CBD      		out 0x2c,r24
+  22 000c 8CB5      		in r24,0x2c
+  23 000e 0895      		ret
+  25               		.section	.text.send_SPI_byte,"ax",@progbits
+  26               	.global	send_SPI_byte
+  28               	send_SPI_byte:
+  29               	/* prologue: function */
+  30               	/* frame size = 0 */
+  31               	/* stack size = 0 */
+  32               	.L__stack_usage = 0
+  33 0000 8EBD      		out 0x2e,r24
+  34               	.L4:
+  35 0002 0DB4      		in __tmp_reg__,0x2d
+  36 0004 07FE      		sbrs __tmp_reg__,7
+  37 0006 00C0      		rjmp .L4
+  38 0008 8EB5      		in r24,0x2e
+  39 000a 0895      		ret
+  41               		.ident	"GCC: (GNU) 4.8.1"
+DEFINED SYMBOLS
+                            *ABS*:00000000 spi.c
+/var/tmp//ccoaBQPg.s:2      *ABS*:0000003e __SP_H__
+/var/tmp//ccoaBQPg.s:3      *ABS*:0000003d __SP_L__
+/var/tmp//ccoaBQPg.s:4      *ABS*:0000003f __SREG__
+/var/tmp//ccoaBQPg.s:5      *ABS*:0000003b __RAMPZ__
+/var/tmp//ccoaBQPg.s:6      *ABS*:00000000 __tmp_reg__
+/var/tmp//ccoaBQPg.s:7      *ABS*:00000001 __zero_reg__
+/var/tmp//ccoaBQPg.s:11     .text.setup_SPI:00000000 setup_SPI
+/var/tmp//ccoaBQPg.s:28     .text.send_SPI_byte:00000000 send_SPI_byte
+
+NO UNDEFINED SYMBOLS
